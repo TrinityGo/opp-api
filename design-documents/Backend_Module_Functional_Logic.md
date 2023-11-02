@@ -2,15 +2,15 @@
 - **Title:** Low-Level Backend Modules Functional Logic
 - **Date:** Nov 2, 2023
 - **Author:** Yiwen Wang
-- **Version:** 1.0
+- **Version:** 1.1
 
 **Revision History**
 |Date|Version|Description|Author|
 |:----:|:----:|:----:|:----:|
 |Nov 2, 2023|1.0|Initial release| Yiwen Wang|
 |Nov 2, 2023|1.1|Class UML updates| Yiwen Wang|
-
 ---------------
+
 ## 1. User Authentication Module Logic
 ### Process Flow:
 1. User Login:
