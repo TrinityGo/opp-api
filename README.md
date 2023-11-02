@@ -18,7 +18,7 @@
     - [Wireframes_UI]: Wireframes of our UI
 - Low Level Deisgn:
     - [ER_Diagram]:Entity Relationship Diagram of our database
-    - [Sequence_Diagram_API]: Sequence Diagram of each ReST API
+    - [API_Sequence_Diagram]: Sequence Diagram of each ReST API
     - [ReST_API_Design]: ReST API design
     - [Backend_Module_Functional_Logic]:Description of how each backend module performs its job with class UML
 
@@ -29,6 +29,8 @@
 **Low Level Design**
 - ER Diagram:
 ![ER_Diagram_show](https://github.com/TrinityGo/opp-api/blob/main/design-documents/ER_Diagram_for_Online_Payment_System.jpeg)
+- API Sequence Diagram:
+![API_Sequence](https://github.com/TrinityGo/opp-api/blob/main/design-documents/Sequence_Diagram/Sequence_Diagram1.png)
 - Backend Drafted functionality logic Class UML:
 ```mermaid
 ---
@@ -148,5 +150,5 @@ Security is not just a feature; it is the foundation of our platform. We are dee
 [Backend_Module_Description]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Backend_Module_Description.md
 [ER_Diagram]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/ER_Diagram_for_Online_Payment_System.jpeg
 [Backend_Module_Functional_Logic]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/Backend_Module_Functional_Logic.md
+[API_Sequence_Diagram]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Sequence_Diagram/Sequence_Diagram1.png
 [Wireframes_UI]:
-[Sequence_Diagram_API]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/sequence_diagram.puml
