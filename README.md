@@ -9,6 +9,7 @@
 |Date|Version|Description|Author|
 |:----:|:----:|:----:|:----:|
 |Nov 2, 2023|1.0|Initial release| Yiwen Wang|
+|Nov 2, 2023|1.1|Update Diagrams/Hyperlinks/Reference| Yijia Ma|
 
 ## Deisgn Stage
 **Design Documents**
@@ -30,7 +31,8 @@
 - ER Diagram:
 ![ER_Diagram_show](https://github.com/TrinityGo/opp-api/blob/main/design-documents/ER_Diagram_for_Online_Payment_System.jpeg)
 - API Sequence Diagram:
-![API_Sequence](https://github.com/TrinityGo/opp-api/blob/main/design-documents/Sequence_Diagram/Sequence_Diagram1.png)
+![API_Sequence1](https://github.com/TrinityGo/opp-api/blob/main/design-documents/Sequence_Diagram/Sequence_Diagram1.png)
+![API_Sequence2](https://github.com/TrinityGo/opp-api/blob/main/design-documents/Sequence_Diagram/Sequence_Diagram2.png)
 - Backend Drafted functionality logic Class UML:
 ```mermaid
 ---
@@ -143,6 +145,10 @@ Our software system is engineered to support the following functionalities:
 ## Security & Compliance
 Security is not just a feature; it is the foundation of our platform. We are deeply committed to protecting our users and their data through industry-standard practices and compliance with regulatory requirements.
 
+## Reference
+https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c
+https://www.lucidchart.com/pages/er-diagrams
+https://plantuml.com/sequence-diagram
 
 <!-- auto references -->
 [ReST_API_Design]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/ReST_API_design.md
@@ -150,5 +156,5 @@ Security is not just a feature; it is the foundation of our platform. We are dee
 [Backend_Module_Description]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Backend_Module_Description.md
 [ER_Diagram]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/ER_Diagram_for_Online_Payment_System.jpeg
 [Backend_Module_Functional_Logic]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/Backend_Module_Functional_Logic.md
-[API_Sequence_Diagram]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Sequence_Diagram/Sequence_Diagram1.png
+[API_Sequence_Diagram]: https://github.com/TrinityGo/opp-api/tree/main/design-documents/Sequence_Diagram
 [Wireframes_UI]:
