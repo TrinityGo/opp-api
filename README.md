@@ -10,7 +10,95 @@
 |:----:|:----:|:----:|:----:|
 |Nov 2, 2023|1.0|Initial release| Yiwen Wang|
 
--------------
+## Deisgn Stage
+**Design Documents**
+- High Level Design:
+    - [HLD_digram]:Diagram of our overall architecture
+    - [Backend_Module_Description]: Description of each of our backend modules
+    - [Wireframes_UI]: Wireframes of our UI
+- Low Level Deisgn:
+    - [ER_Diagram]:Entity Relationship Diagram of our database
+    - [Sequence_Diagram_API]: Sequence Diagram of each ReST API
+    - [ReST_API_Design]: ReST API design
+    - [Backend_Module_Functional_Logic]:Description of how each backend module performs its job with class UML
+
+**High Level Design**
+- Architecture
+![HLD](https://github.com/TrinityGo/opp-api/blob/main/design-documents/HLD.JPG)
+
+**Low Level Design**
+- ER Diagram:
+![ER_Diagram_show](https://github.com/TrinityGo/opp-api/blob/main/design-documents/ER_Diagram_for_Online_Payment_System.jpeg)
+- Backend Drafted functionality logic Class UML:
+```mermaid
+---
+title: OPP Backend
+---
+classDiagram
+      class User {
+          +Integer ID
+          +String Email
+          +String HashedPassword
+          +Decimal Balance
+          +ValidateCredentials(email, password) Boolean
+          +UpdateProfile(profileData)
+          +AddPaymentMethod(paymentMethod)
+      }
+      class PaymentMethod {
+          +Integer ID
+          +Integer UserID
+          +String CardNumber
+          +Date ExpiryDate
+          +Integer CVV
+          +Validate() Boolean
+      }
+      class Transaction {
+          +Integer ID
+          +Integer UserID
+          +Decimal Amount
+          +String Status
+          +DateTime Timestamp
+          +LogSuccess()
+          +LogFailure()
+      }
+      class Session {
+          +String Token
+          +Integer UserID
+          +DateTime ExpiresAt
+          +IsValid() Boolean
+          +Invalidate()
+      }
+      class AuthenticationService {
+          +Authenticate(email, password) Session
+          +Logout(sessionToken)
+      }
+      class PaymentService {
+          +InitiatePayment(paymentDetails) PaymentResult
+          +ProcessPayment(transaction) PaymentResult
+      }
+      class TransactionService {
+          +CreateTransaction(user, paymentDetails) Transaction
+          +GetTransactionHistory(user) Transaction[]
+      }
+      class UserService {
+          +GetUserDetails(userId) User
+          +UpdateUserBalance(user, amount)
+      }
+      class SecurityService {
+          +HashPassword(password) String
+          +VerifyPassword(password, hash) Boolean
+          +GenerateToken(userId) String
+          +EncryptData(data) String
+      }
+
+      User "1" *-- "many" PaymentMethod : has
+      User "1" *-- "many" Transaction : has
+      Transaction "n" -- "1" PaymentService : is processed by
+      Session "n" -- "1" AuthenticationService : is created by
+      PaymentMethod "1" -- "1" SecurityService : is validated by
+```
+
+----------------
 
 ## Introduction
 - *This is a course project for NEU CS5500 all the descriptions below is a mock situation for our project with course project requirments.*
@@ -52,3 +140,13 @@ Our software system is engineered to support the following functionalities:
 
 ## Security & Compliance
 Security is not just a feature; it is the foundation of our platform. We are deeply committed to protecting our users and their data through industry-standard practices and compliance with regulatory requirements.
+
+
+<!-- auto references -->
+[ReST_API_Design]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/ReST_API_design.md
+[HLD_digram]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/HLD.JPG
+[Backend_Module_Description]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Backend_Module_Description.md
+[ER_Diagram]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/ER_Diagram_for_Online_Payment_System.jpeg
+[Backend_Module_Functional_Logic]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/Backend_Module_Functional_Logic.md
+[Wireframes_UI]:
+[Sequence_Diagram_API]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/sequence_diagram.puml
