@@ -1,0 +1,68 @@
+@startuml Sequenced User Interactions
+Header Sequenced User Interactions: Signup, Login, and Data Access in Payment System
+actor  User
+box "Frontend" 
+participant Homepage
+participant Signup_page
+participant Login_page
+end box
+participant "Backend(REST)" as Backend
+database Database
+
+User -> Homepage: 1. Initiate Signup process
+Homepage -> Signup_page: Open Signup_page
+Signup_page --> User: Display Signup_page
+User -> Signup_page: Username & Password Token
+Signup_page -> Backend: Username & Password Validation Request
+Backend --> Signup_page: Username & Password Validation Response
+Signup_page -> Backend: Signup Request
+Backend -> Database: postData(New Account Data)
+Database --> Backend: postData Response
+Backend --> Signup_page: Signup Response
+Signup_page --> User: Display Account Signup Response
+
+|||
+|||
+|||
+User -> Homepage: 2. Login Request
+Homepage -> Login_page: Open Login_page
+Login_page --> User: Display Login_page
+
+User -> Login_page: Username & Password Token
+Login_page -> Backend: Login Request
+Backend -> Database: Account Authentication Request
+Database --> Backend: Account Authentication Response
+Backend --> Login_page: Login Response/Error Message
+Login_page --> Homepage: Login Response/Error Message
+Homepage --> User: Display User Homepage & Menu
+|||
+|||
+|||
+User -> Homepage: 3. getData
+note over User, Homepage: Data Requests include: account details, balance, transactions, completed & pending purchases
+Homepage -> Backend: getData(query)
+Backend -> Database: getData(data)
+Database --> Backend: data
+Backend --> Homepage: data
+Homepage --> User: Display data
+|||
+|||
+|||
+User -> Homepage: 4. Logout Request
+Homepage -> Backend: Logout Request
+Backend --> Homepage: Unsaved Data Prompt
+Homepage --> User: Display Unsaved Data Prompt
+User -> Homepage: Save or Discard Confirmation
+Homepage -> Backend: Save or Discard Confirmation
+Backend --> Database: postData(unsaved data)
+Database --> Backend: postData Response
+Backend --> Homepage: Logout Response
+Homepage --> User: Logout Response
+/'
+participant Homepage [
+=Frontend
+----
+""Homepage""
+]
+'/
+@enduml
