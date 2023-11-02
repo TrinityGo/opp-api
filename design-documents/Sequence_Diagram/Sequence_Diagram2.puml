@@ -1,0 +1,135 @@
+@startuml Sequenced Payment Processing
+actor  User
+participant Merchant
+'participant Payment_server
+
+!pragma teoz true
+box "Payment_server" #LightBlue
+box "Frontend" 
+participant Homepage
+participant Login_page
+participant Checkout_page
+end box
+
+box "Backend(REST)"
+participant Account_Auth_Module as aam
+participant Payment_Ingestion_Module as pim
+queue Job_queue
+participant Payment_Processor_Module as ppm
+end box
+
+database Database
+end box
+
+box "Bank" #LightBlue
+participant Acquiring_Bank
+participant Issuing_Bank
+end box
+
+== Checkout & User Login ==
+User -> Merchant: Checkout Request
+
+alt Redirected to Payment Service Provider Homepage
+    
+    Merchant -> Homepage: Open Payment Service Provider Homepage
+    Homepage --> Merchant: Display Homepage
+    Merchant --> User: Display Homepage
+    User -> Homepage: Login Request
+    Homepage -> Login_page: Open Payment Service Provider Login_page
+
+else Redirected to Payment Service Provider Login_page
+
+    Merchant -> Login_page: Open Payment Service Provider Login_page
+
+end
+
+Login_page --> User: Display Login_page
+User -> Login_page: Username & Password Token
+Login_page -> aam: Login Request
+aam -> Database: Account Authentication Request
+Database --> aam: Account Authentication Response
+aam --> Login_page: Login Response/Error Message
+alt Login Successful
+
+    Login_page --> Checkout_page: Open Checkout_page
+
+else Login Error
+
+    Login_page --> User: Display Login Error Message
+      loop
+        User -> Login_page: Login Request until either Successful or User Quits
+      end
+end
+
+Checkout_page --> User: Display Checkout_page
+
+== Payment Processing ==
+alt Credit Card Selected
+    
+    User -> Checkout_page: Credit Card Charge Request with token
+
+else Debit Card Selected
+
+    User -> Checkout_page: Debit Card Charge Request with token
+end
+
+Checkout_page -> pim: Payment Processing Request(Encryption needed)
+'pim -> Job_queue: Send Payment Object with Encrypted Token
+pim -> Database: postData(pending payment)
+
+ppm -> Job_queue: Payment Processing Request
+Job_queue -> ppm: Send/Pop Payment Object
+'ppm -> Session_Management: Create Payment Processing Session with Encrypted Token
+ppm -> Acquiring_Bank: Payment Validation Request
+Acquiring_Bank -> Issuing_Bank: Payment Validation Request
+
+alt Valid Payment & Sufficient Funds
+    
+    Issuing_Bank --> Acquiring_Bank: Payment Processing Approval
+    Issuing_Bank -> Acquiring_Bank: Fund Transfer Request
+    Acquiring_Bank --> Issuing_Bank: Fund Transfer Completed
+    Acquiring_Bank --> ppm: Payment Validation Response(ok)
+    ppm --> Database: putData(Completed Payment)
+    
+    alt Credit Card Payment
+      
+      ppm --> Database: postData(in-processing transaction)
+      ppm -> Acquiring_Bank: Credit Card Settlement Request
+      ...
+      loop Delay
+        note over ppm, Acquiring_Bank
+        a minimum of two calendar days
+        end note
+      end
+      ...
+      Acquiring_Bank --> ppm: Credit Card Settlement Response(ok)
+      ppm --> Database: putData(processed transaction)
+      
+    else Debit Card Payment
+      
+      ppm --> Database: postData(processed transaction)
+      
+    end
+    
+    ppm --> Checkout_page: Completed Payment Response
+    Checkout_page --> User: Display Completed Payment Info
+    
+else Invalid Payment or Insufficient Funds
+
+    Issuing_Bank --> Acquiring_Bank: Payment Processing Rejection
+    Acquiring_Bank --> ppm: Payment Validation Response(fail)
+    ppm --> Database: putData(declined Payment)
+    ppm --> Database: postDate(declined transaction)
+    
+    ppm --> Checkout_page: Declined Payment Response
+    Checkout_page --> User: Display Declined Payment Info
+end
+
+'Merchant -> Payment_server: User Authentication Request
+'Payment_server -> Login_page: redirected to Payment_Login_page
+
+'User -> Payment_homepage: Login Request
+'/Payment_homepage -> Login_page: Open Login_page'/
+
+
+@enduml
