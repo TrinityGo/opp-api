@@ -8,6 +8,7 @@
 |Date|Version|Description|Author|
 |:----:|:----:|:----:|:----:|
 |Nov 2, 2023|1.0|Initial release| Yiwen Wang|
+|Nov 2, 2023|1.1|Class UML updates| Yiwen Wang|
 
 ---------------
 ## 1. User Authentication Module Logic
@@ -26,6 +27,7 @@
 
 ### Business Logic:
 The authentication module's business logic focuses on ensuring that user credentials are validated securely and that sessions are managed effectively to prevent unauthorized access.
+
 
 ## 2. Payment Processing Module Logic
 ### Process Flow:
@@ -65,3 +67,72 @@ This module's business logic ensures that all financial transactions are audited
     - Update the user's balance in the database.
 ### Business Logic:
 The business logic for this module deals with maintaining user profiles, securing payment methods, and keeping accurate records of account balances.
+
+## Class UML
+```mermaid
+---
+title: OPP Backend
+---
+classDiagram
+      class User {
+          +Integer ID
+          +String Email
+          +String HashedPassword
+          +Decimal Balance
+          +ValidateCredentials(email, password) Boolean
+          +UpdateProfile(profileData)
+          +AddPaymentMethod(paymentMethod)
+      }
+      class PaymentMethod {
+          +Integer ID
+          +Integer UserID
+          +String CardNumber
+          +Date ExpiryDate
+          +Integer CVV
+          +Validate() Boolean
+      }
+      class Transaction {
+          +Integer ID
+          +Integer UserID
+          +Decimal Amount
+          +String Status
+          +DateTime Timestamp
+          +LogSuccess()
+          +LogFailure()
+      }
+      class Session {
+          +String Token
+          +Integer UserID
+          +DateTime ExpiresAt
+          +IsValid() Boolean
+          +Invalidate()
+      }
+      class AuthenticationService {
+          +Authenticate(email, password) Session
+          +Logout(sessionToken)
+      }
+      class PaymentService {
+          +InitiatePayment(paymentDetails) PaymentResult
+          +ProcessPayment(transaction) PaymentResult
+      }
+      class TransactionService {
+          +CreateTransaction(user, paymentDetails) Transaction
+          +GetTransactionHistory(user) Transaction[]
+      }
+      class UserService {
+          +GetUserDetails(userId) User
+          +UpdateUserBalance(user, amount)
+      }
+      class SecurityService {
+          +HashPassword(password) String
+          +VerifyPassword(password, hash) Boolean
+          +GenerateToken(userId) String
+          +EncryptData(data) String
+      }
+
+      User "1" *-- "many" PaymentMethod : has
+      User "1" *-- "many" Transaction : has
+      Transaction "n" -- "1" PaymentService : is processed by
+      Session "n" -- "1" AuthenticationService : is created by
+      PaymentMethod "1" -- "1" SecurityService : is validated by
+```
