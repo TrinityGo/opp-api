@@ -146,8 +146,8 @@ Our software system is engineered to support the following functionalities:
 Security is not just a feature; it is the foundation of our platform. We are deeply committed to protecting our users and their data through industry-standard practices and compliance with regulatory requirements.
 
 ## Reference
-https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c
-https://www.lucidchart.com/pages/er-diagrams
+https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c  
+https://www.lucidchart.com/pages/er-diagram  
 https://plantuml.com/sequence-diagram
 
 <!-- auto references -->

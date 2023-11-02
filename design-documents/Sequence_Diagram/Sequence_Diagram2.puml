@@ -1,4 +1,5 @@
 @startuml Sequenced Payment Processing
+Header Sequenced Payment Processing
 actor  User
 participant Merchant
 'participant Payment_server
@@ -124,12 +125,5 @@ else Invalid Payment or Insufficient Funds
     ppm --> Checkout_page: Declined Payment Response
     Checkout_page --> User: Display Declined Payment Info
 end
-
-'Merchant -> Payment_server: User Authentication Request
-'Payment_server -> Login_page: redirected to Payment_Login_page
-
-'User -> Payment_homepage: Login Request
-'/Payment_homepage -> Login_page: Open Login_page'/
-
 
 @enduml
