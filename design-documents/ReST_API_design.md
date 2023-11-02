@@ -1,4 +1,14 @@
 # ReST API Design
+- **Title:** ReST API Design
+- **Date:** Nov 2, 2023
+- **Author:** Yiwen Wang
+- **Version:** 1.0
+**Revision History**
+|Date|Version|Description|Author|
+|:----:|:----:|:----:|:----:|
+|Nov 2, 2023|1.0|Initial release| Yiwen Wang|
+
+
 ## Endpoint Description
 Retrieve a list of items based on the title provided as a query parameter. If no title is provided, all items will be retrieved.
 
