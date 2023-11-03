@@ -157,4 +157,4 @@ https://plantuml.com/sequence-diagram
 [ER_Diagram]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/ER_Diagram_for_Online_Payment_System.jpeg
 [Backend_Module_Functional_Logic]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/Backend_Module_Functional_Logic.md
 [API_Sequence_Diagram]: https://github.com/TrinityGo/opp-api/tree/main/design-documents/Sequence_Diagram
-[Wireframes_UI]:
+[Wireframes_UI]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Wireframes_UI.md
