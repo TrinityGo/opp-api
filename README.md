@@ -3,13 +3,14 @@
 - **Course:** NEU CS5500 Fall 2023
 - **Date:** Nov 2, 2023
 - **Author:** Yiwen Wang, Xinyi Gao, Yijia Ma
-- **Version:** 1.1
+- **Version:** 1.2
 
 **Revision History**
 |Date|Version|Description|Author|
 |:----:|:----:|:----:|:----:|
 |Nov 2, 2023|1.0|Initial release| Yiwen Wang|
 |Nov 2, 2023|1.1|Update Diagrams/Hyperlinks/Reference| Yijia Ma|
+|Nov 2, 2023|1.2|Update Diagrams/Hyperlinks/Reference|Xinyi Gao|
 
 ## Deisgn Stage
 **Design Documents**
