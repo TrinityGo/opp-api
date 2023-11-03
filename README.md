@@ -148,9 +148,9 @@ Our software system is engineered to support the following functionalities:
 Security is not just a feature; it is the foundation of our platform. We are deeply committed to protecting our users and their data through industry-standard practices and compliance with regulatory requirements.
 
 ## Reference
-https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c  
-https://www.lucidchart.com/pages/er-diagram  
-https://plantuml.com/sequence-diagram
+1. Medium, Sriram Srinivasan, Payment Processing Architecture, https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c  
+2. Lucidchart, How to Draw an ER Diagram， https://www.lucidchart.com/pages/how-to-draw-ERD 
+3. Plantuml, Sequence Diagram, https://plantuml.com/sequence-diagram
 
 <!-- auto references -->
 [ReST_API_Design]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/ReST_API_design.md
