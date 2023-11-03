@@ -15,13 +15,13 @@
 ## Deisgn Stage
 **Design Documents**
 - High Level Design:
-    - [HLD_digram]:Diagram of our overall architecture
+    - [HLD_digram]:Diagram of our overall architecture[^1]
     - [Deployment_Pipeline]: Deployment pipeline design
     - [Backend_Module_Description]: Description of each of our backend modules
     - [Wireframes_UI]: Wireframes of our UI
 - Low Level Deisgn:
-    - [ER_Diagram]:Entity Relationship Diagram of our database
-    - [API_Sequence_Diagram]: Sequence Diagram of each ReST API
+    - [ER_Diagram]:Entity Relationship Diagram of our database[^2]
+    - [API_Sequence_Diagram]: Sequence Diagram of each ReST API[^3]
     - [ReST_API_Design]: ReST API design
     - [Backend_Module_Functional_Logic]:Description of how each backend module performs its job with class UML
 
@@ -148,9 +148,9 @@ Our software system is engineered to support the following functionalities:
 Security is not just a feature; it is the foundation of our platform. We are deeply committed to protecting our users and their data through industry-standard practices and compliance with regulatory requirements.
 
 ## Reference
-1. Medium, Sriram Srinivasan, Payment Processing Architecture, https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c  
-2. Lucidchart, How to Draw an ER Diagram， https://www.lucidchart.com/pages/how-to-draw-ERD 
-3. Plantuml, Sequence Diagram, https://plantuml.com/sequence-diagram
+[^1]: Medium, Sriram Srinivasan, Payment Processing Architecture, https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c  
+[^2]: Lucidchart, How to Draw an ER Diagram， https://www.lucidchart.com/pages/how-to-draw-ERD 
+[^3]: Plantuml, Sequence Diagram, https://plantuml.com/sequence-diagram
 
 <!-- auto references -->
 [ReST_API_Design]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/ReST_API_design.md
