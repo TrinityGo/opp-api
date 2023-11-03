@@ -7,6 +7,6 @@
 **Revision History**
 |Date|Version|Description|Author|
 |:----:|:----:|:----:|:----:|
-|Nov 1, 2023|1.0|Initial release| Xinyi Gao|
+|Nov 1, 2023|1.0|Initial release| Xinyi Gao， Yiwen Wang|
 ---------------
 
