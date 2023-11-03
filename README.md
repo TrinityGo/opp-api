@@ -20,8 +20,8 @@
     - [Backend_Module_Description]: Description of each of our backend modules
     - [Wireframes_UI]: Wireframes of our UI
 - Low Level Deisgn:
-    - [ER_Diagram]: Entity Relationship Diagram of our database[^2]
-    - [API_Sequence_Diagram]: Sequence Diagram of each ReST API[^3]
+    - [ER_Diagram]: Entity Relationship Diagram of our database[^2] [^3]
+    - [API_Sequence_Diagram]: Sequence Diagram of each ReST API[^4]
     - [ReST_API_Design]: ReST API design
     - [Backend_Module_Functional_Logic]: Description of how each backend module performs its job with class UML
 
@@ -150,7 +150,8 @@ Security is not just a feature; it is the foundation of our platform. We are dee
 ## Reference
 [^1]: Medium, Sriram Srinivasan, Payment Processing Architecture, https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c  
 [^2]: Lucidchart, How to Draw an ER Diagram， https://www.lucidchart.com/pages/how-to-draw-ERD 
-[^3]: Plantuml, Sequence Diagram, https://plantuml.com/sequence-diagram
+[^3]: Lucidchart, What is an Entity Relationship Diagram (ERD)?https://www.lucidchart.com/pages/er-diagrams
+[^4]: Plantuml, Sequence Diagram, https://plantuml.com/sequence-diagram
 
 <!-- auto references -->
 [ReST_API_Design]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/ReST_API_design.md
