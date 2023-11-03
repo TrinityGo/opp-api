@@ -9,8 +9,8 @@
 |Date|Version|Description|Author|
 |:----:|:----:|:----:|:----:|
 |Nov 2, 2023|1.0|Initial release| Yiwen Wang|
-|Nov 2, 2023|1.1|Update Diagrams/Hyperlinks/Reference| Yijia Ma|
-|Nov 2, 2023|1.2|Update Diagrams/Hyperlinks/Reference|Xinyi Gao|
+|Nov 2, 2023|1.1|Update Diagrams,Hyperlinks for Reference| Yijia Ma|
+|Nov 2, 2023|1.2|Update Diagrams, Hyperlinks for Reference|Xinyi Gao, Yiwen Wang|
 
 ## Deisgn Stage
 **Design Documents**
