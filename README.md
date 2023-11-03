@@ -15,15 +15,15 @@
 ## Deisgn Stage
 **Design Documents**
 - High Level Design:
-    - [HLD_digram]:Diagram of our overall architecture[^1]
+    - [HLD_digram]: Diagram of our overall architecture[^1]
     - [Deployment_Pipeline]: Deployment pipeline design
     - [Backend_Module_Description]: Description of each of our backend modules
     - [Wireframes_UI]: Wireframes of our UI
 - Low Level Deisgn:
-    - [ER_Diagram]:Entity Relationship Diagram of our database[^2]
+    - [ER_Diagram]: Entity Relationship Diagram of our database[^2]
     - [API_Sequence_Diagram]: Sequence Diagram of each ReST API[^3]
     - [ReST_API_Design]: ReST API design
-    - [Backend_Module_Functional_Logic]:Description of how each backend module performs its job with class UML
+    - [Backend_Module_Functional_Logic]: Description of how each backend module performs its job with class UML
 
 **High Level Design**
 - Architecture
