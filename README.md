@@ -15,6 +15,7 @@
 **Design Documents**
 - High Level Design:
     - [HLD_digram]:Diagram of our overall architecture
+    - [Deployment_Pipeline]: Deployment pipeline design
     - [Backend_Module_Description]: Description of each of our backend modules
     - [Wireframes_UI]: Wireframes of our UI
 - Low Level Deisgn:
@@ -158,3 +159,4 @@ https://plantuml.com/sequence-diagram
 [Backend_Module_Functional_Logic]:https://github.com/TrinityGo/opp-api/blob/main/design-documents/Backend_Module_Functional_Logic.md
 [API_Sequence_Diagram]: https://github.com/TrinityGo/opp-api/tree/main/design-documents/Sequence_Diagram
 [Wireframes_UI]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Wireframes_UI.md
+[Deployment_Pipeline]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Deployment_Pipeline.md
