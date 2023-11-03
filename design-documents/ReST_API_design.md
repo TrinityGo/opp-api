@@ -24,6 +24,7 @@ GET /api/items/{item_id}/?title=
 |:------------|:------------|:---------------------|
 | item_id     | String      | The unique ID of item|
 
+
 ## Query Parameters
 | Parameter Name | Parameter Type | Description            |
 |:---------------|:---------------|:-----------------------|

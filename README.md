@@ -103,7 +103,7 @@ classDiagram
 ----------------
 
 ## Introduction
-- *This is a course project for NEU CS5500 all the descriptions below is a mock situation for our project with course project requirments.*
+- *This is a course project for NEU CS5500. All the descriptions below is a mock situation for our project with course project requirments.*
 
 
 Welcome to the repository for our innovative Online Payment Processing Platform (OPP). Our startup(course project), comprising a dedicated team of business development consultants, solutions architects, and software engineers, is on the cutting edge of digital payment solutions. Having secured Series-B funding, we are excited to develop a robust platform designed to facilitate online transactions for consumers and businesses, providing a superior alternative to traditional point-of-sale systems.
