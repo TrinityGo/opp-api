@@ -25,11 +25,11 @@
     - [ReST_API_Design]: ReST API design
     - [Backend_Module_Functional_Logic]: Description of how each backend module performs its job with class UML
 
-**High Level Design**
+**High Level Design Visualization**
 - Architecture
 ![HLD](https://github.com/TrinityGo/opp-api/blob/main/design-documents/HLD.JPG)
 
-**Low Level Design**
+**Low Level Design Visualization**
 - ER Diagram:
 ![ER_Diagram_show](https://github.com/TrinityGo/opp-api/blob/main/design-documents/ER_Diagram_for_Online_Payment_System.jpeg)
 - API Sequence Diagram:
