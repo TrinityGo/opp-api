@@ -14,33 +14,33 @@
 ## Endpoint Description
 Retrieve a list of items based on the title provided as a query parameter. If no title is provided, all items will be retrieved.
 
-## API Endpoint
+### API Endpoint
 ```
 GET /api/items/{item_id}/?title=
 ```
 
-## Request Fields
+### Request Fields
 | Field Name  | Field Type  | Field Description    |
 |:------------|:------------|:---------------------|
 | item_id     | String      | The unique ID of item|
 
 
-## Query Parameters
+### Query Parameters
 | Parameter Name | Parameter Type | Description            |
 |:---------------|:---------------|:-----------------------|
 | title     | String      | Title of the item to search for|
 
-## Request Headers
+### Request Headers
 | Header Name | Header Value     |
 |:------------|:-----------------|
 | Accept      | application/json | 
 
-## Example Request
+### Example Request
 ```sh
 $ curl 'http://localhost:8000/api/items/123?title=learn%20fastapi' -i -H 'Accept: application/json'
 ```
 
-## Successful Response
+### Successful Response
 - **Status Code:** 200 OK
 - **Content-Type:** application/json
 - **Response Body:**
@@ -58,7 +58,7 @@ $ curl 'http://localhost:8000/api/items/123?title=learn%20fastapi' -i -H 'Accept
 ]
 ```
 
-## Other Responses
+### Other Responses
 1. **301 Moved Permanently** (if the API endpoint has been changed)
     - **Content-Type:** application/json
     - **Response Body:** (A list of new URLs or information about the change)
