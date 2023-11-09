@@ -11,15 +11,37 @@
 |Nov 2, 2023|1.0|Initial release| Yiwen Wang|
 |Nov 2, 2023|1.1|Update Diagrams,Hyperlinks for Reference| Yijia Ma|
 |Nov 2, 2023|1.2|Update Diagrams, Hyperlinks for Reference|Xinyi Gao, Yiwen Wang|
+|Nov 9, 2023|1.2|Create Backend Skeleton and some Public APIs|Xinyi Gao, Yiwen Wang, Yijia Ma|
 
-## Deisgn Stage
+## Initial Installation
+* Create a virtual environment
+  * `pip install virtualenv`
+  * `virtualenv env`
+* Activate the virtual environment
+  * on macOS and Linux, use:
+    * `source env/bin/activate`
+  * on Windows, use:
+    * `env\Scripts\activate`
+* Install the required' dependencies
+  * `pip install -r requirements.txt`
+* Open a terminal to the root of this repo and run the following command:
+  * `uvicorn main:app --reload`
+* Upload `.env` file to root directory
+
+## Post-Installation
+* Open the following URL on a browser of your choice: `http://127.0.0.1:8000/docs`
+* Since all the API's are protected, you need to authenticate and authorize yourself
+  * create user via `/auth` endpoint
+  * authenticate and authorize user via `authorize` button at top right corner
+
+## Design Stage
 **Design Documents**
 - High Level Design:
     - [HLD_digram]: Diagram of our overall architecture[^1]
     - [Deployment_Pipeline]: Deployment pipeline design
     - [Backend_Module_Description]: Description of each of our backend modules
     - [Wireframes_UI]: Wireframes of our UI
-- Low Level Deisgn:
+- Low Level Design:
     - [ER_Diagram]: Entity Relationship Diagram of our database[^2] [^3]
     - [API_Sequence_Diagram]: Sequence Diagram of each ReST API[^4]
     - [ReST_API_Design]: ReST API design
