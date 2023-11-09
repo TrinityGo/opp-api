@@ -13,9 +13,6 @@
 |Nov 2, 2023|1.2|Update Diagrams, Hyperlinks for Reference|Xinyi Gao, Yiwen Wang|
 |Nov 9, 2023|2.0|Create Backend Skeleton and some Public APIs|Xinyi Gao, Yiwen Wang, Yijia Ma|
 
-
-
-
 ## Introduction
 - *This is a course project for NEU CS5500. All the descriptions below is a mock situation for our project with course project requirments.*
 
