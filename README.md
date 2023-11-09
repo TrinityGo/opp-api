@@ -24,7 +24,7 @@
     * `env\Scripts\activate`
 * Install the required' dependencies
   * `pip install -r requirements.txt`
-* Open a terminal to the root of this repo and run the following command:
+* Open a terminal to the root of backend folder and run the following command:
   * `uvicorn main:app --reload`
 * Upload `.env` file to root directory
 
