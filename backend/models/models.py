@@ -16,11 +16,12 @@ class Users(Base):
     role = Column(String)
     phone_number = Column(String)
 
-class Transaction(Base):
+# TODO Transactions?
+class Transactions(Base):
     __tablename__ = 'transactions'
     
     transaction_id = Column(Integer, primary_key=True, index=True)
-    customer_id = Column(Integer, ForeignKey("users.id"))
+    customer_id = Column(Integer, ForeignKey("users.id")) # TODO Users.id?
     merchant_id = Column(Integer) # foreignkey("merchants.id")
     encrypted_info = Column(String)
     amount = Column(Float)

@@ -4,7 +4,7 @@ from starlette import status
 from sqlalchemy.orm import Session
 from db.database import SessionLocal
 from datetime import datetime
-from models.models import Transaction
+from models.models import Transactions
 from routers.auth import get_current_user
 from routers.helpers import check_user_authentication, encrypt_transaction_info, process_transaction
 from typing import Annotated
@@ -46,7 +46,7 @@ async def create_transaction(user: user_dependency, db: db_dependency, request: 
     transaction_data['encrypted_info'] = json.dumps(encrypted_transaction_info)  
     transaction_data['time_stamp'] = request.time_stamp
     transaction_data['status'] = 'pending'
-    transaction_model = Transaction(**transaction_data)
+    transaction_model = Transactions(**transaction_data)
 
     # insert unprocessed transaction with pending status
     db.add(transaction_model)
@@ -57,3 +57,35 @@ async def create_transaction(user: user_dependency, db: db_dependency, request: 
     transaction_model.status = status
     db.add(transaction_model)
     db.commit()
+
+
+@router.get("/read-all")
+async def get_all(user: user_dependency, db: db_dependency):
+    check_user_authentication(user)
+    return db.query(Transactions).filter(Transactions.customer_id == user.get('id')).all()
+
+
+@router.get("/transaction/{transaction_id}", status_code=status.HTTP_200_OK)
+async def get_transaction_by_id(user: user_dependency, db: db_dependency, transaction_id: int = Path(gt=0)):
+    check_user_authentication(user)
+
+    transaction_model = (
+        db.query(Transactions).filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).first()
+    )
+
+    if transaction_model is not None:
+        return transaction_model
+    raise HTTPException(status_code=404, detail='Transaction not found')
+
+
+@router.get("/transaction/{date}", status_code=status.HTTP_200_OK)
+async def get_transaction_by_date(user: user_dependency, db: db_dependency, date: datetime = Path(..., description="Date in ISO format"):
+    check_user_authentication(user)
+
+    transaction_model = (
+        db.query(Transactions).filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).first()
+    )
+
+    if transaction_model is not None:
+        return transaction_model
+    raise HTTPException(status_code=404, detail='Transaction not found')
