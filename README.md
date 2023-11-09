@@ -1,9 +1,9 @@
 # TrinityGo Online-payment Processing Platform (OPP)
 - **Title:** Project ReadMe file
 - **Course:** NEU CS5500 Fall 2023
-- **Date:** Nov 2, 2023
+- **Date:** Nov 9, 2023
 - **Author:** Yiwen Wang, Xinyi Gao, Yijia Ma
-- **Version:** 1.2
+- **Version:** 2.0
 
 **Revision History**
 |Date|Version|Description|Author|
@@ -11,9 +11,10 @@
 |Nov 2, 2023|1.0|Initial release| Yiwen Wang|
 |Nov 2, 2023|1.1|Update Diagrams,Hyperlinks for Reference| Yijia Ma|
 |Nov 2, 2023|1.2|Update Diagrams, Hyperlinks for Reference|Xinyi Gao, Yiwen Wang|
-|Nov 9, 2023|1.2|Create Backend Skeleton and some Public APIs|Xinyi Gao, Yiwen Wang, Yijia Ma|
+|Nov 9, 2023|2.0|Create Backend Skeleton and some Public APIs|Xinyi Gao, Yiwen Wang, Yijia Ma|
 
-## Initial Installation
+## Development Stage
+### Initial Installation
 * Create a virtual environment
   * `pip install virtualenv`
   * `virtualenv env`
@@ -28,7 +29,7 @@
   * `uvicorn main:app --reload`
 * Upload `.env` file to root directory
 
-## Post-Installation
+### Post-Installation
 * Open the following URL on a browser of your choice: `http://127.0.0.1:8000/docs`
 * Since all the API's are protected, you need to authenticate and authorize yourself
   * create user via `/auth` endpoint
