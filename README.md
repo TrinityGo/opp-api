@@ -14,6 +14,8 @@
 |Nov 9, 2023|2.0|Create Backend Skeleton and some Public APIs|Xinyi Gao, Yiwen Wang, Yijia Ma|
 
 
+
+
 ## Introduction
 - *This is a course project for NEU CS5500. All the descriptions below is a mock situation for our project with course project requirments.*
 
@@ -42,15 +44,6 @@ Our software system is engineered to support the following functionalities:
 - **Fraud Detection:** Utilize rigorous validation processes to identify and reject fraudulent credit card transactions.
 - **Funds Verification:** Ensure debit cards have sufficient funds before authorizing purchases.
 - **Account Management:** Enable users to create and manage their accounts with the platform seamlessly.
-
-
-### Requirements
-- Debit Card Transactions: Must be instantly processed, bypassing delays commonly associated with the banking system.
-- Credit Card Transactions: Require a minimum of two calendar days in the processing state before reflecting in the total balance as 'processed'.
-- Card Validation: Implement the Lund Algorithm for credit card number validation as part of our commitment to security and authenticity.
-- Security Measures:
-    - Mandatory user authentication to safeguard against unauthorized access.
-    - Enforce encryption and other security protocols for data transmission to ensure confidentiality and integrity.
 
 ### Security & Compliance
 Security is not just a feature; it is the foundation of our platform. We are deeply committed to protecting our users and their data through industry-standard practices and compliance with regulatory requirements.
@@ -89,6 +82,14 @@ Security is not just a feature; it is the foundation of our platform. We are dee
     - [API_Sequence_Diagram]: Sequence Diagram of each ReST API[^4]
     - [ReST_API_Design]: ReST API design
     - [Backend_Module_Functional_Logic]: Description of how each backend module performs its job with class UML
+
+### Design Requirements
+- Debit Card Transactions: Must be instantly processed, bypassing delays commonly associated with the banking system.
+- Credit Card Transactions: Require a minimum of two calendar days in the processing state before reflecting in the total balance as 'processed'.
+- Card Validation: Implement the Lund Algorithm for credit card number validation as part of our commitment to security and authenticity.
+- Security Measures:
+    - Mandatory user authentication to safeguard against unauthorized access.
+    - Enforce encryption and other security protocols for data transmission to ensure confidentiality and integrity.
 
 **High Level Design Visualization**
 - Architecture
