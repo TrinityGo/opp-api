@@ -174,7 +174,8 @@ classDiagram
       PaymentMethod "1" -- "1" SecurityService : is validated by
 ```
 
-----------------
+## Documentations
+
 
 ## Reference
 [^1]: Medium, Sriram Srinivasan, Payment Processing Architecture, https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c  
