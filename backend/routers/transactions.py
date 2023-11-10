@@ -107,8 +107,6 @@ async def get_transaction_by_date(user: user_dependency, db: db_dependency, date
         transaction_model = (
             db.query(Transactions).filter(Transactions.customer_id == user.get('id')).filter(extract('year', Transactions.time_stamp) == parsed_date.year).filter(extract('month', Transactions.time_stamp) == parsed_date.month).filter(extract('day', Transactions.time_stamp) == parsed_date.day).all()
         )
-        # ob = db.query(Transactions).filter(Transactions.transaction_id == 5).first()
-        # return {"message": ob.time_stamp.date()}
     except Exception as e:
         return {"message": str(e)}
 
@@ -195,6 +193,7 @@ async def update_transaction(user: user_dependency, db: db_dependency,
                       transaction_id: int = Path(gt=-1)):
     # TODO May be auto-updating depending on payment processing
     # check_user_authentication(user)
+    check_admin_user_auth(user)
 
     transaction_model = db.query(Transactions).filter(Transactions.transaction_id == transaction_id).first()
 
