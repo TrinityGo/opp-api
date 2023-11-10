@@ -67,6 +67,7 @@ Security is not just a feature; it is the foundation of our platform. We are dee
   * create user via `/auth` endpoint
   * authenticate and authorize user via `authorize` button at top right corner
 
+
 ## Design Stage
 **Design Documents**
 - High Level Design:
