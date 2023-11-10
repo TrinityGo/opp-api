@@ -175,6 +175,10 @@ classDiagram
 ```
 
 ## Documentations
+- [Authentication_API]: Explain how to obtain and use API keys or token
+- [Authorization_API]: Explain how to obtain and use API keys or token
+- [Endpoint_API]: Detail the required request parameters, acceptable request methods (GET, POST, PUT, DELETE), and expected response formats
+- [Error_API]: Document error status codes and meanings
 
 ## Reference
 [^1]: Medium, Sriram Srinivasan, Payment Processing Architecture, https://medium.com/@sriram.inc/payment-processing-architecture-9651e7292b0c  
@@ -191,3 +195,7 @@ classDiagram
 [API_Sequence_Diagram]: https://github.com/TrinityGo/opp-api/tree/main/design-documents/Sequence_Diagram
 [Wireframes_UI]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Wireframes_UI.md
 [Deployment_Pipeline]: https://github.com/TrinityGo/opp-api/blob/main/design-documents/Deployment_Pipeline.md
+[Authentication_API]: https://github.com/TrinityGo/opp-api/blob/main/doc/authentication_API.md
+[Authorization_API]: https://github.com/TrinityGo/opp-api/blob/main/doc/authorization_API.md
+[Endpoint_API]: https://github.com/TrinityGo/opp-api/blob/main/doc/endpoint_API.md
+[Error_API]: https://github.com/TrinityGo/opp-api/blob/main/doc/error_API.md
