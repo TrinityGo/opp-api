@@ -26,13 +26,13 @@ user_dependency = Annotated[dict, (Depends(get_current_user))]
 
 
 @router.get("/transactions",status_code=status.HTTP_200_OK)
-async def read_all(user: user_dependency, db: db_dependency):
+async def read_all_transactions(user: user_dependency, db: db_dependency):
     check_admin_user_auth(user)
     return db.query(Transactions).all()
 
 
 @router.get("/users",status_code=status.HTTP_200_OK)
-async def read_all(user: user_dependency, db: db_dependency):
+async def read_all_users(user: user_dependency, db: db_dependency):
     check_admin_user_auth(user)
     return db.query(Users).all()
 
