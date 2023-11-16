@@ -16,7 +16,7 @@ def check_user_authentication(user):
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
 
-def encrypt_transaction_info(customer_bank_info, merchant_bank_info):
+def encrypt_card_info(card_number):
     # combined_data = customer_bank_info + delimiter + merchant_bank_info
     # cipher = AES.new(AES_KEY, AES.MODE_EAX)
     # cipher_text, tag = cipher.encrypt_and_digest(combined_data.encode())
@@ -33,21 +33,21 @@ def encrypt_transaction_info(customer_bank_info, merchant_bank_info):
     #     "tag": encoded_tag,
     #     "cipher_text": encoded_cipher_text
     # })
-    encrypted_object = json.dumps({
-        "customer_bank_info": customer_bank_info,
-        "merchant_bank_info": merchant_bank_info,
-    })
+    # encrypted_object = json.dumps({
+    #     "customer_bank_info": customer_bank_info,
+    #     "merchant_bank_info": merchant_bank_info,
+    # })
 
 # encrypted_object is a JSON string that can be passed around
-    return encrypted_object
+    return ""
 
 
 # return "approved" for credit cards, "completed" for bank accounts"; return "rejected" for failure
-def process_transaction(transaction_model):
-    if(transaction_model.payment_type == "bank_account"):
-        return 'completed'
-    else:
-        if(validate_card(transaction_model.encrypted_info) & process_card(transaction_model.encrypted_info, transaction_model.amount)):
+def process_transaction(payment_type, card_number, amount):
+    if(validate_card(card_number) & process_card(card_number, amount)):
+        if(payment_type == "debit_card"):
+            return 'completed'
+        else:
             return 'approved'
     return 'rejected'
 
@@ -79,7 +79,6 @@ def process_card(card_number, amt):
         response.raise_for_status()
         # {'msg': 'Insufficient funds and/or fraudulent card', 'success': 'false'}
         result = response.json()
-        # return result
         return result['success'] == 'true'
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
