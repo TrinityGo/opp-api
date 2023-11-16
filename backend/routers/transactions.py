@@ -35,6 +35,7 @@ class TransactionRequest(BaseModel):
     merchant_bank_info: str
     amount: float
     time_stamp: datetime
+    payment_type: str
         
 class UpdateRequest(BaseModel):
     status: str
@@ -55,6 +56,7 @@ async def create_transaction(user: user_dependency, db: db_dependency, request: 
         # json.dumps(encrypted_transaction_info)  
         transaction_data['time_stamp'] = request.time_stamp
         transaction_data['amount'] = request.amount
+        transaction_data['payment_type'] = request.payment_type
         transaction_data['status'] = 'pending'
         transaction_model = Transactions(**transaction_data)
 
@@ -72,6 +74,7 @@ async def create_transaction(user: user_dependency, db: db_dependency, request: 
     except Exception as e:
         message = str(e)
         return {"message": "Failed to create transaction" + message}
+
 
 # regular user-get by user_id
 @router.get("/get-all")
