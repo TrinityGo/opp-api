@@ -8,6 +8,7 @@ from datetime import datetime
 from models.models import Transactions
 from routers.auth import get_current_user
 from routers.helpers import check_user_authentication, encrypt_card_info, process_transaction
+from routers.admin import read_all_transactions
 from typing import Annotated
 from routers.admin import check_admin_user_auth
 import json
@@ -82,9 +83,9 @@ async def get_all_transactions(user: user_dependency, db: db_dependency):
     check_user_authentication(user)
     if(user.get('user_role') == 'customer'):
         return ( db.query(Transactions).filter(Transactions.customer_id == user.get('id')).all() )
-    else:
+    if(user.get('user_role') == 'merchant'):
         return ( db.query(Transactions).filter(Transactions.merchant_id == user.get('id')).all() )
-
+    return read_all_transactions(user, db)
 
 @router.get("/transaction/{transaction_id}", status_code=status.HTTP_200_OK)
 async def get_transaction_by_id(user: user_dependency, db: db_dependency, transaction_id: int = Path(gt=-1)):
@@ -92,13 +93,17 @@ async def get_transaction_by_id(user: user_dependency, db: db_dependency, transa
 
     filtered_transactions = db.query(Transactions).filter(Transactions.transaction_id == transaction_id)
 
-    if(user.role == "customer"):
+    if(user.get('user_role') == "customer"):
         transaction_model = (
             filtered_transactions.filter(Transactions.customer_id == user.get('id')).first()
         )
-    else:
+    elif(user.get('user_role') == 'merchant'):
         transaction_model = (
-            filtered_transactions.filter(Transactions.merchant_id == user.get('id'))
+            filtered_transactions.filter(Transactions.merchant_id == user.get('id')).first()
+        )
+    elif(user.get('user_role') == 'admin'):
+        transaction_model = (
+            filtered_transactions.first()
         )
 
     # transaction_model = (
@@ -123,9 +128,12 @@ async def get_transactions_by_date(user: user_dependency, db: db_dependency, dat
     # try:
     if(user.get('user_role') == "customer"):
         filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
-    else:
+    elif(user.get('user_role') == 'merchant'):
         filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
-
+    elif(user.get('user_role') == 'admin'):
+        filtered_transactions = db.query(Transactions)
+    
+    
     transaction_model = (
         filtered_transactions.filter(extract('year', Transactions.time_stamp) == parsed_date.year).filter(extract('month', Transactions.time_stamp) == parsed_date.month).filter(extract('day', Transactions.time_stamp) == parsed_date.day).all()
     )
@@ -149,9 +157,10 @@ async def get_transactions_by_period(user: user_dependency, db: db_dependency, s
 
     if(user.get('user_role') == "customer"):
         filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
-    else:
+    elif(user.get('user_role') == 'merchant'):
         filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
-
+    elif(user.get('user_role') == 'admin'):
+        filtered_transactions = db.query(Transactions)
 
     transaction_model = (
         filtered_transactions.filter(extract('year', Transactions.time_stamp) >= parsed_start_date.year).filter(extract('month', Transactions.time_stamp) >= parsed_start_date.month).filter(extract('day', Transactions.time_stamp) >= parsed_start_date.day).filter(extract('year', Transactions.time_stamp) <= parsed_end_date.year).filter(extract('month', Transactions.time_stamp) <= parsed_end_date.month).filter(extract('day', Transactions.time_stamp) <= parsed_end_date.day).all()
@@ -171,8 +180,10 @@ async def get_balance_sum(user: user_dependency, db: db_dependency):
 
     if(user.get('user_role') == "customer"):
         filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
-    else:
+    elif(user.get('user_role') == 'merchant'):
         filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
+    elif(user.get('user_role') == 'admin'):
+        filtered_transactions = db.query(Transactions)
 
     transaction_model = (
         filtered_transactions.filter(func.lower(Transactions.status) == "completed").all()
@@ -196,8 +207,10 @@ async def get_balance_sum_by_date(user: user_dependency, db: db_dependency, date
 
     if(user.get('user_role') == "customer"):
         filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
-    else:
+    elif(user.get('user_role') == 'merchant'):
         filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
+    elif(user.get('user_role') == 'admin'):
+        filtered_transactions = db.query(Transactions)
 
     transaction_model = (
         filtered_transactions.filter(extract('year', Transactions.time_stamp) == parsed_date.year).filter(extract('month', Transactions.time_stamp) == parsed_date.month).filter(extract('day', Transactions.time_stamp) == parsed_date.day).filter(func.lower(Transactions.status) == "completed").all()
@@ -222,8 +235,10 @@ async def get_balance_sum_by_period(user: user_dependency, db: db_dependency, st
 
     if(user.get('user_role') == "customer"):
         filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
-    else:
+    elif(user.get('user_role') == 'merchant'):
         filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
+    elif(user.get('user_role') == 'admin'):
+        filtered_transactions = db.query(Transactions)
 
     transaction_model = (
         filtered_transactions.filter(extract('year', Transactions.time_stamp) >= parsed_start_date.year).filter(extract('month', Transactions.time_stamp) >= parsed_start_date.month).filter(extract('day', Transactions.time_stamp) >= parsed_start_date.day).filter(extract('year', Transactions.time_stamp) <= parsed_end_date.year).filter(extract('month', Transactions.time_stamp) <= parsed_end_date.month).filter(extract('day', Transactions.time_stamp) <= parsed_end_date.day).filter(func.lower(Transactions.status) == "completed").all()
@@ -281,8 +296,10 @@ async def delete_transaction(user: user_dependency, db: db_dependency, transacti
     
     if(user.get('user_role') == "customer"):
         transaction_model = filtered_transactions.filter(Transactions.customer_id == user.get('id')).first()
-    else:
+    elif(user.get('user_role') == 'merchant'):
         transaction_model = filtered_transactions.filter(Transactions.merchant_id == user.get('id')).first()
+    elif(user.get('user_role') == 'admin'):
+        filtered_transactions = filtered_transactions.first()
 
     # transaction_model = db.query(Transactions).filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).first()
     
