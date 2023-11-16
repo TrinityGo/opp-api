@@ -7,7 +7,7 @@ from db.database import SessionLocal
 from datetime import datetime
 from models.models import Transactions
 from routers.auth import get_current_user
-from routers.helpers import check_user_authentication, encrypt_transaction_info, process_transaction
+from routers.helpers import check_user_authentication, encrypt_card_info, process_transaction
 from typing import Annotated
 from routers.admin import check_admin_user_auth
 import json
@@ -28,11 +28,12 @@ user_dependency = Annotated[dict, (Depends(get_current_user))]
 
 
 class TransactionRequest(BaseModel):
-    transaction_id: int
-    # TODO customer_id: int
+    # transaction_id: int
+    # customer_id: int
     merchant_id: int
     customer_bank_info: str
     merchant_bank_info: str
+    card_number: str
     amount: float
     time_stamp: datetime
     payment_type: str
@@ -47,49 +48,62 @@ async def create_transaction(user: user_dependency, db: db_dependency, request: 
     check_user_authentication(user)
     
     try:
-        encrypted_transaction_info = encrypt_transaction_info(request.customer_bank_info, request.merchant_bank_info)
-        transaction_data = dict()
-        transaction_data['transaction_id'] = request.transaction_id
-        transaction_data['customer_id'] = user.get('id')
-        transaction_data['merchant_id'] = request.merchant_id
-        transaction_data['encrypted_info'] = encrypted_transaction_info
-        # json.dumps(encrypted_transaction_info)  
-        transaction_data['time_stamp'] = request.time_stamp
-        transaction_data['amount'] = request.amount
-        transaction_data['payment_type'] = request.payment_type
-        transaction_data['status'] = 'pending'
-        transaction_model = Transactions(**transaction_data)
+        encrypted_card_info = encrypt_card_info(request.card_number)
+        create_transaction_model = Transactions(
+            # transaction_id=request.transaction_id,
+            customer_id=user.get('id'),
+            merchant_id=request.merchant_id,
+            customer_bank_info=request.customer_bank_info,
+            merchant_bank_info=request.merchant_bank_info,
+            encrypted_info=encrypted_card_info,
+            time_stamp=request.time_stamp,
+            amount=request.amount,
+            payment_type=request.payment_type,
+            status='pending'
+        )
 
         # insert unprocessed transaction with pending status
-        db.add(transaction_model)
+        db.add(create_transaction_model)
         db.commit()
         
         # process transaction and update transaction status
-        status = process_transaction(transaction_model)
-        transaction_model.status = status
-        db.add(transaction_model)
+        status = process_transaction(request.payment_type, request.card_number, request.amount)
+        create_transaction_model.status = status
         db.commit()
-
         return {"message": "Transaction created successfully"}
     except Exception as e:
         message = str(e)
-        return {"message": "Failed to create transaction" + message}
+        return {"message": "Failed to create transaction " + message}
 
 
 # regular user-get by user_id
-@router.get("/get-all")
-async def get_all(user: user_dependency, db: db_dependency):
+@router.get("/transactions/get")
+async def get_all_transactions(user: user_dependency, db: db_dependency):
     check_user_authentication(user)
-    return db.query(Transactions).filter(Transactions.customer_id == user.get('id')).all()
+    if(user.get('user_role') == 'customer'):
+        return ( db.query(Transactions).filter(Transactions.customer_id == user.get('id')).all() )
+    else:
+        return ( db.query(Transactions).filter(Transactions.merchant_id == user.get('id')).all() )
 
 
 @router.get("/transaction/{transaction_id}", status_code=status.HTTP_200_OK)
 async def get_transaction_by_id(user: user_dependency, db: db_dependency, transaction_id: int = Path(gt=-1)):
     check_user_authentication(user)
 
-    transaction_model = (
-        db.query(Transactions).filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).first()
-    )
+    filtered_transactions = db.query(Transactions).filter(Transactions.transaction_id == transaction_id)
+
+    if(user.role == "customer"):
+        transaction_model = (
+            filtered_transactions.filter(Transactions.customer_id == user.get('id')).first()
+        )
+    else:
+        transaction_model = (
+            filtered_transactions.filter(Transactions.merchant_id == user.get('id'))
+        )
+
+    # transaction_model = (
+    #     filtered_transactions.filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).first()
+    # )
 
     if transaction_model is not None:
         return transaction_model
@@ -97,7 +111,7 @@ async def get_transaction_by_id(user: user_dependency, db: db_dependency, transa
 
 
 @router.get("/transactions/{date}", status_code=status.HTTP_200_OK)
-async def get_transaction_by_date(user: user_dependency, db: db_dependency, date: str = Path(..., description="Date in ISO format")):
+async def get_transactions_by_date(user: user_dependency, db: db_dependency, date: str = Path(..., description="Date in ISO format")):
     try:
         parsed_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
@@ -106,12 +120,17 @@ async def get_transaction_by_date(user: user_dependency, db: db_dependency, date
     message = parsed_date.date()
     check_user_authentication(user)
 
-    try:
-        transaction_model = (
-            db.query(Transactions).filter(Transactions.customer_id == user.get('id')).filter(extract('year', Transactions.time_stamp) == parsed_date.year).filter(extract('month', Transactions.time_stamp) == parsed_date.month).filter(extract('day', Transactions.time_stamp) == parsed_date.day).all()
-        )
-    except Exception as e:
-        return {"message": str(e)}
+    # try:
+    if(user.get('user_role') == "customer"):
+        filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
+    else:
+        filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
+
+    transaction_model = (
+        filtered_transactions.filter(extract('year', Transactions.time_stamp) == parsed_date.year).filter(extract('month', Transactions.time_stamp) == parsed_date.month).filter(extract('day', Transactions.time_stamp) == parsed_date.day).all()
+    )
+    # except Exception as e:
+    #     return {"message": str(e)}
 
     if transaction_model is not None:
         return transaction_model
@@ -119,7 +138,7 @@ async def get_transaction_by_date(user: user_dependency, db: db_dependency, date
 
 
 @router.get("/transactions/{start_date}/{end_date}", status_code=status.HTTP_200_OK)
-async def get_transaction_by_period(user: user_dependency, db: db_dependency, start_date: str = Path(..., description="Start Date in ISO format"), end_date: str = Path(..., description="End Date in ISO format")):
+async def get_transactions_by_period(user: user_dependency, db: db_dependency, start_date: str = Path(..., description="Start Date in ISO format"), end_date: str = Path(..., description="End Date in ISO format")):
     try:
         parsed_start_date = datetime.strptime(start_date, "%Y-%m-%d")
         parsed_end_date = datetime.strptime(end_date, "%Y-%m-%d") # or user timedelta(days=1)
@@ -128,9 +147,18 @@ async def get_transaction_by_period(user: user_dependency, db: db_dependency, st
     
     check_user_authentication(user)
 
+    if(user.get('user_role') == "customer"):
+        filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
+    else:
+        filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
+
+
     transaction_model = (
-        db.query(Transactions).filter(Transactions.customer_id == user.get('id')).filter(extract('year', Transactions.time_stamp) >= parsed_start_date.year).filter(extract('month', Transactions.time_stamp) >= parsed_start_date.month).filter(extract('day', Transactions.time_stamp) >= parsed_start_date.day).filter(extract('year', Transactions.time_stamp) <= parsed_end_date.year).filter(extract('month', Transactions.time_stamp) <= parsed_end_date.month).filter(extract('day', Transactions.time_stamp) <= parsed_end_date.day).all()
+        filtered_transactions.filter(extract('year', Transactions.time_stamp) >= parsed_start_date.year).filter(extract('month', Transactions.time_stamp) >= parsed_start_date.month).filter(extract('day', Transactions.time_stamp) >= parsed_start_date.day).filter(extract('year', Transactions.time_stamp) <= parsed_end_date.year).filter(extract('month', Transactions.time_stamp) <= parsed_end_date.month).filter(extract('day', Transactions.time_stamp) <= parsed_end_date.day).all()
     )
+    # transaction_model = (
+    #     db.query(Transactions).filter(Transactions.customer_id == user.get('id')).filter(extract('year', Transactions.time_stamp) >= parsed_start_date.year).filter(extract('month', Transactions.time_stamp) >= parsed_start_date.month).filter(extract('day', Transactions.time_stamp) >= parsed_start_date.day).filter(extract('year', Transactions.time_stamp) <= parsed_end_date.year).filter(extract('month', Transactions.time_stamp) <= parsed_end_date.month).filter(extract('day', Transactions.time_stamp) <= parsed_end_date.day).all()
+    # )
 
     if transaction_model is not None:
         return transaction_model
@@ -138,11 +166,16 @@ async def get_transaction_by_period(user: user_dependency, db: db_dependency, st
 
 
 @router.get("/balance", status_code=status.HTTP_200_OK)
-async def get_balance(user: user_dependency, db: db_dependency):
+async def get_balance_sum(user: user_dependency, db: db_dependency):
     check_user_authentication(user)
 
+    if(user.get('user_role') == "customer"):
+        filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
+    else:
+        filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
+
     transaction_model = (
-        db.query(Transactions).filter(Transactions.merchant_id == user.get('id')).filter(func.lower(Transactions.status) == "completed").all()
+        filtered_transactions.filter(func.lower(Transactions.status) == "completed").all()
     )
 
     if transaction_model is not None:
@@ -152,7 +185,7 @@ async def get_balance(user: user_dependency, db: db_dependency):
 
 
 @router.get("/balance/{date}", status_code=status.HTTP_200_OK)
-async def get_balance_by_date(user: user_dependency, db: db_dependency, date: str = Path(..., description="Date in ISO format")):
+async def get_balance_sum_by_date(user: user_dependency, db: db_dependency, date: str = Path(..., description="Date in ISO format")):
     try:
         parsed_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
@@ -160,8 +193,14 @@ async def get_balance_by_date(user: user_dependency, db: db_dependency, date: st
     
     check_user_authentication(user)
 
+
+    if(user.get('user_role') == "customer"):
+        filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
+    else:
+        filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
+
     transaction_model = (
-        db.query(Transactions).filter(Transactions.merchant_id == user.get('id')).filter(extract('year', Transactions.time_stamp) == parsed_date.year).filter(extract('month', Transactions.time_stamp) == parsed_date.month).filter(extract('day', Transactions.time_stamp) == parsed_date.day).filter(func.lower(Transactions.status) == "completed").all()
+        filtered_transactions.filter(extract('year', Transactions.time_stamp) == parsed_date.year).filter(extract('month', Transactions.time_stamp) == parsed_date.month).filter(extract('day', Transactions.time_stamp) == parsed_date.day).filter(func.lower(Transactions.status) == "completed").all()
     )
 
     if transaction_model is not None:
@@ -171,7 +210,7 @@ async def get_balance_by_date(user: user_dependency, db: db_dependency, date: st
 
 
 @router.get("/balance/{start_date}/{end_date}", status_code=status.HTTP_200_OK)
-async def get_balance_by_period(user: user_dependency, db: db_dependency, start_date: str = Path(..., description="Start Date in ISO format"), end_date: str = Path(..., description="End Date in ISO format")):
+async def get_balance_sum_by_period(user: user_dependency, db: db_dependency, start_date: str = Path(..., description="Start Date in ISO format"), end_date: str = Path(..., description="End Date in ISO format")):
     try:
         parsed_start_date = datetime.strptime(start_date, "%Y-%m-%d")
         parsed_end_date = datetime.strptime(end_date, "%Y-%m-%d") # or user timedelta(days=1)
@@ -180,8 +219,14 @@ async def get_balance_by_period(user: user_dependency, db: db_dependency, start_
     
     check_user_authentication(user)
 
+
+    if(user.get('user_role') == "customer"):
+        filtered_transactions = db.query(Transactions).filter(Transactions.customer_id == user.get('id'))
+    else:
+        filtered_transactions = db.query(Transactions).filter(Transactions.merchant_id == user.get('id'))
+
     transaction_model = (
-        db.query(Transactions).filter(Transactions.merchant_id == user.get('id')).filter(extract('year', Transactions.time_stamp) >= parsed_start_date.year).filter(extract('month', Transactions.time_stamp) >= parsed_start_date.month).filter(extract('day', Transactions.time_stamp) >= parsed_start_date.day).filter(extract('year', Transactions.time_stamp) <= parsed_end_date.year).filter(extract('month', Transactions.time_stamp) <= parsed_end_date.month).filter(extract('day', Transactions.time_stamp) <= parsed_end_date.day).filter(func.lower(Transactions.status) == "completed").all()
+        filtered_transactions.filter(extract('year', Transactions.time_stamp) >= parsed_start_date.year).filter(extract('month', Transactions.time_stamp) >= parsed_start_date.month).filter(extract('day', Transactions.time_stamp) >= parsed_start_date.day).filter(extract('year', Transactions.time_stamp) <= parsed_end_date.year).filter(extract('month', Transactions.time_stamp) <= parsed_end_date.month).filter(extract('day', Transactions.time_stamp) <= parsed_end_date.day).filter(func.lower(Transactions.status) == "completed").all()
     )
 
     if transaction_model is not None:
@@ -190,8 +235,9 @@ async def get_balance_by_period(user: user_dependency, db: db_dependency, start_
     raise HTTPException(status_code=404, detail=f'Transaction not found from {start_date} to {end_date}')
 
 
+# admin can update transaction by transaction_id
 @router.put("/transaction/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_transaction(user: user_dependency, db: db_dependency,
+async def update_transaction_by_id(user: user_dependency, db: db_dependency,
                       request: UpdateRequest,
                       transaction_id: int = Path(gt=-1)):
     # TODO May be auto-updating depending on payment processing
@@ -207,11 +253,38 @@ async def update_transaction(user: user_dependency, db: db_dependency,
     db.commit()
 
 
+# System will auto check and update all approved transaction when they are completed
+# No user authentication needed
+@router.put("/transactions/update", status_code=status.HTTP_204_NO_CONTENT)
+async def auto_update_transaction(db: db_dependency):
+    # TODO May be auto-updating depending on payment processing
+    transaction_model = (
+        db.query(Transactions).filter(Transactions.status == "approved").all()
+    )
+
+    # check_user_authentication(user)
+    if transaction_model is None:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+    # make the updates
+    time_stamp = datetime.now()
+    for transaction in transaction_model:
+        if(time_stamp.year >= transaction.time_stamp.year & time_stamp.month >= transaction.time_stamp.month & (time_stamp.day >= transaction.time_stamp.day+2)):
+            transaction.status = "completed"
+    db.commit()
+
+
 @router.delete("/transaction/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_transaction(user: user_dependency, db: db_dependency, transaction_id: int = Path(gt=-1)):
     check_admin_user_auth(user)
 
-    transaction_model = db.query(Transactions).filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).first()
+    filtered_transactions = db.query(Transactions).filter(Transactions.transaction_id == transaction_id)
+    
+    if(user.get('user_role') == "customer"):
+        transaction_model = filtered_transactions.filter(Transactions.customer_id == user.get('id')).first()
+    else:
+        transaction_model = filtered_transactions.filter(Transactions.merchant_id == user.get('id')).first()
+
+    # transaction_model = db.query(Transactions).filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).first()
     
     if transaction_model is None:
         raise HTTPException(status_code=404, detail='Transaction not found')
