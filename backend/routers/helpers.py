@@ -4,8 +4,7 @@ import os
 from dotenv import load_dotenv
 import base64
 import json
-
-
+import requests
 
 
 load_dotenv()  # take environment variables from .env.
@@ -15,7 +14,6 @@ delimiter = '||'
 def check_user_authentication(user):
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
-
 
 
 def encrypt_transaction_info(customer_bank_info, merchant_bank_info):
@@ -43,5 +41,46 @@ def encrypt_transaction_info(customer_bank_info, merchant_bank_info):
 # encrypted_object is a JSON string that can be passed around
     return encrypted_object
 
+
+# return "approved" for credit cards, "completed" for bank accounts"; return "rejected" for failure
 def process_transaction(transaction_model):
-    return 'approved'
+    if(transaction_model.payment_type == "bank_account"):
+        return 'completed'
+    else:
+        if(validate_card(transaction_model.encrypted_info) & process_card(transaction_model.encrypted_info, transaction_model.amount)):
+            return 'approved'
+    return 'rejected'
+
+
+def validate_card(card_number):
+    url = "https://c3jkkrjnzlvl5lxof74vldwug40pxsqo.lambda-url.us-west-2.on.aws"
+    headers = {"Content-Type": "application/json"}
+    data = {"card_number": card_number}
+    
+    try:
+        response = requests.post(url, json=data, headers=headers)
+        response.raise_for_status()  # Raise an error for bad responses (4xx or 5xx)
+        result = response.json()
+        return True
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that may occur during the request
+        print(f"Error: {e}")
+        return False
+        # {"success": False, "msg": "Error during API request"}
+
+
+def process_card(card_number, amt):
+    url = "https://223didiouo3hh4krxhm4n4gv7y0pfzxk.lambda-url.us-west-2.on.aws"
+    headers = {"Conetent-Type": "application/json"}
+    data = {"card_number": f"{card_number}", "amt": f"{amt}"}
+
+    try:
+        response = requests.post(url, json=data, headers=headers)
+        response.raise_for_status()
+        # {'msg': 'Insufficient funds and/or fraudulent card', 'success': 'false'}
+        result = response.json()
+        # return result
+        return result['success'] == 'true'
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        return False

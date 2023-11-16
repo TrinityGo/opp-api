@@ -37,7 +37,6 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-
 class CreateUserRequest(BaseModel):
     email: str
     username: str
@@ -106,7 +105,7 @@ def create_access_token(username: str, user_id: int, role: str, expires_delta: t
     token = jwt.encode(claims, SECRET_KEY, algorithm=ALGORITHM)
     return token
 
-
+@router.post("/user", status_code=status.HTTP_201_CREATED)
 async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
