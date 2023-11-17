@@ -45,6 +45,9 @@ Our software system is engineered to support the following functionalities:
 ### Security & Compliance
 Security is not just a feature; it is the foundation of our platform. We are deeply committed to protecting our users and their data through industry-standard practices and compliance with regulatory requirements.
 
+## Encryption Algorithm Explaination
+Our encryption algorithm relies on credited online resources and code samples. It's not independently developed.
+
 ## Installation Instruction & Swagger UI
 ### Initial Installation
 * Create a virtual environment
