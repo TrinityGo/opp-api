@@ -19,6 +19,7 @@ def test_process_transaction():
     assert process_transaction(credit_card, bad_card_number, bad_amount) == 'rejected'
 
 
+def test_process_transaction():
     assert process_transaction(debit_card, good_card_number, good_amount) == 'completed'
     assert process_transaction(debit_card, good_card_number, bad_amount) == 'rejected'
     assert process_transaction(debit_card, bad_card_number, good_amount) == 'rejected'

@@ -45,7 +45,7 @@ Our software system is engineered to support the following functionalities:
 ### Security & Compliance
 Security is not just a feature; it is the foundation of our platform. We are deeply committed to protecting our users and their data through industry-standard practices and compliance with regulatory requirements.
 
-## Installation Instruction
+## Installation Instruction & Swagger UI
 ### Initial Installation
 * Create a virtual environment
   * `pip install virtualenv`

@@ -30,5 +30,3 @@ class Transactions(Base):
     time_stamp = Column(DateTime, default=datetime.utcnow)
     status = Column(String)
     payment_type = Column(String) # credit_card/debit_card
-    
-    
