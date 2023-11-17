@@ -1,5 +1,5 @@
 from db.database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Float, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Float, DateTime, JSON
 from datetime import datetime
 
 
@@ -25,7 +25,7 @@ class Transactions(Base):
     merchant_id = Column(Integer) # foreignkey("merchants.id")
     customer_bank_info = Column(String)
     merchant_bank_info = Column(String)
-    encrypted_info = Column(String) # encrypted_card_number
+    encrypted_card_number = Column(JSON) # encrypted_card_number
     amount = Column(Float)
     time_stamp = Column(DateTime, default=datetime.utcnow)
     status = Column(String)

@@ -1,45 +1,59 @@
 from starlette.exceptions import HTTPException
-# from Crypto.Cipher import AES
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+from base64 import b64encode, b64decode
+
 import os
 from dotenv import load_dotenv
-import base64
-import json
+# import base64
+# import json
 import requests
 
 
 load_dotenv()  # take environment variables from .env.
 AES_KEY = os.environ.get("AES_KEY")
-delimiter = '||'
 
 def check_user_authentication(user):
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
 
-def encrypt_card_info(card_number):
-    # combined_data = customer_bank_info + delimiter + merchant_bank_info
-    # cipher = AES.new(AES_KEY, AES.MODE_EAX)
-    # cipher_text, tag = cipher.encrypt_and_digest(combined_data.encode())
-    # nonce = cipher.nonce
-    
-    # # Convert to Base64 to ensure safe string representation
-    # encoded_nonce = base64.b64encode(nonce).decode('utf-8')
-    # encoded_tag = base64.b64encode(tag).decode('utf-8')
-    # encoded_cipher_text = base64.b64encode(cipher_text).decode('utf-8')
+def encrypt_card_number(card_number):
+    # Ensure the card number and key are bytes
+    card_number_bytes = card_number.encode("utf-8")
+    key_bytes = AES_KEY.encode("utf-8")
 
-    # # Create a JSON object
-    # encrypted_object = json.dumps({
-    #     "nonce": encoded_nonce,
-    #     "tag": encoded_tag,
-    #     "cipher_text": encoded_cipher_text
-    # })
-    # encrypted_object = json.dumps({
-    #     "customer_bank_info": customer_bank_info,
-    #     "merchant_bank_info": merchant_bank_info,
-    # })
+    # Generate a random IV (Initialization Vector)
+    iv = os.urandom(16)
 
-# encrypted_object is a JSON string that can be passed around
-    return ""
+    # Create an AES cipher with CBC mode
+    cipher = Cipher(algorithms.AES(key_bytes), modes.CFB(iv), backend=default_backend())
+    encryptor = cipher.encryptor()
+
+    # Encrypt the card number
+    ciphertext = encryptor.update(card_number_bytes) + encryptor.finalize()
+
+    # Return the IV and the encrypted card number as base64-encoded strings
+    return {"iv": b64encode(iv).decode("utf-8"), "crypted_text": b64encode(ciphertext).decode("utf-8")}
+
+
+def decrypt_card_number(encrypted_data):
+    # Ensure the key is bytes
+    key_bytes = AES_KEY.encode("utf-8")
+
+    # Decode the IV and encrypted data from base64
+    iv = b64decode(encrypted_data["iv"])
+    ciphertext = b64decode(encrypted_data["crypted_text"])
+
+    # Create an AES cipher with CBC mode
+    cipher = Cipher(algorithms.AES(key_bytes), modes.CFB(iv), backend=default_backend())
+    decryptor = cipher.decryptor()
+
+    # Decrypt the card number
+    decrypted_data = decryptor.update(ciphertext) + decryptor.finalize()
+
+    # Return the decrypted card number as a string
+    return decrypted_data.decode("utf-8")
 
 
 # return "approved" for credit cards, "completed" for bank accounts"; return "rejected" for failure
