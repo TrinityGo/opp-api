@@ -120,3 +120,13 @@ def test_process_card():
     
     assert process_card(bad_number_transaction_debit_card.encrypted_info, bad_number_transaction_debit_card.amount) == False
     assert process_card(bad_fund_transaction_debit_card.encrypted_info, bad_fund_transaction_debit_card.amount) == False
+    
+    from routers.helpers import encrypt_card_info, process_transaction
+
+def test_encrypt_card_info():
+    encrypted_info = encrypt_card_info("1234567890123456")
+    assert encrypted_info is not None  # Add more specific assertions based on your encryption logic
+
+def test_process_transaction():
+    status = process_transaction("credit_card", "1234567890123456", 100.0)
+    assert status in ["approved", "rejected", "completed"]
