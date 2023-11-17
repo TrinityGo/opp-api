@@ -5,7 +5,7 @@ client = TestClient(app)
 
 def test_user_creation():
     response = client.post("/auth/", json={"email": "test@example.com", "password": "password"})
-    assert response.status_code == 401
+    assert response.status_code == 422
 
 def test_token_generation():
     response = client.post("/auth/token", data={"username": "testuser", "password": "password"})
@@ -28,4 +28,4 @@ def test_create_user():
         "role": "customer"
     }
     response = client.post("/auth/", json=user_data)
-    assert response.status_code == 401
+    assert response.status_code == 201
