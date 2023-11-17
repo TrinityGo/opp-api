@@ -56,7 +56,7 @@ async def create_transaction(user: user_dependency, db: db_dependency, request: 
             merchant_id=request.merchant_id,
             customer_bank_info=request.customer_bank_info,
             merchant_bank_info=request.merchant_bank_info,
-            encrypted_card_info=encrypted_card_number,
+            encrypted_card_number=encrypted_card_number,
             time_stamp=request.time_stamp,
             amount=request.amount,
             payment_type=request.payment_type,
