@@ -69,6 +69,7 @@ Our encryption algorithm relies on credited online resources and code samples. I
 * Since all the API's are protected, you need to authenticate and authorize yourself
   * create user via `/auth` endpoint
   * authenticate and authorize user via `authorize` button at top right corner
+* Tests are working in this environment as well
 
 
 ## Design Stage
