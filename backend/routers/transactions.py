@@ -7,7 +7,7 @@ from db.database import SessionLocal
 from datetime import datetime
 from models.models import Transactions
 from routers.auth import get_current_user
-from routers.helpers import check_user_authentication, encrypt_card_info, process_transaction
+from routers.helpers import check_user_authentication, encrypt_card_number, process_transaction
 from routers.admin import read_all_transactions
 from typing import Annotated
 from routers.admin import check_admin_user_auth
@@ -49,14 +49,14 @@ async def create_transaction(user: user_dependency, db: db_dependency, request: 
     check_user_authentication(user)
     
     try:
-        encrypted_card_info = encrypt_card_info(request.card_number)
+        encrypted_card_number = encrypt_card_number(request.card_number)
         create_transaction_model = Transactions(
             # transaction_id=request.transaction_id,
             customer_id=user.get('id'),
             merchant_id=request.merchant_id,
             customer_bank_info=request.customer_bank_info,
             merchant_bank_info=request.merchant_bank_info,
-            encrypted_info=encrypted_card_info,
+            encrypted_card_number=encrypted_card_number,
             time_stamp=request.time_stamp,
             amount=request.amount,
             payment_type=request.payment_type,
