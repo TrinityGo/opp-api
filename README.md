@@ -71,6 +71,15 @@ Our encryption algorithm relies on credited online resources and code samples. I
   * authenticate and authorize user via `authorize` button at top right corner
 * Tests are working in this environment as well
 
+### Docker
+Navigate to the root of this directory
+
+* Build the image: `docker build -t opp-api:v1 .`
+* Run the container: `docker run --name payment-service -p 8000:8000 opp-api:v1`
+* Stop the container: `docker stop payment-service`
+* Restart the container: `docker start payment-service`
+* Remove the container: `docker remove payment-service`
+
 
 ## Design Stage
 **Design Documents**

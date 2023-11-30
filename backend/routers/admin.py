@@ -3,10 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
-from routers.auth import get_current_user
+from backend.routers.auth import get_current_user
 
-from models.models import Users, Transactions
-from db.database import SessionLocal
+from backend.models.models import Users, Transactions
+from backend.db.database import SessionLocal
 
 router = APIRouter(prefix='/admin', tags=['admin'])
 
