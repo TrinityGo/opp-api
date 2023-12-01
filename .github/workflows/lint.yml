@@ -31,6 +31,12 @@ jobs:
         pip install pylint
     - name: Lint with pylint
       run: |
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        ALGORITHM: ${{ secrets.ALGORITHM }}
+        AES_KEY: ${{ secrets.AES_KEY }}
+    - name: Lint with pylint
+      run: |
         # stop the build if there are Python syntax errors or undefinded names
         pylint models 
     # - name: Test with pytest
