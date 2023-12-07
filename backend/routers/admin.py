@@ -28,7 +28,7 @@ DbDependency = Annotated[Session, Depends(get_db)]
 UserDependency = Annotated[dict, (Depends(get_current_user))]
 
 # when an API uses this, it will enforce authorization
-user_dependency = Annotated[dict, (Depends(get_current_user))]
+UserDependency = Annotated[dict, (Depends(get_current_user))]
 
 
 @router.get("/transactions",status_code=status.HTTP_200_OK,tags=["Administrative Control"])

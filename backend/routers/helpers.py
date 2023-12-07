@@ -16,14 +16,17 @@ load_dotenv()  # take environment variables from .env.
 # These are used to create the signature for a JWT
 AES_KEY = os.environ.get("AES_KEY")
 
+
 def check_user_authentication(user):
-    """This function checks if the user is authenticated. If not, it raises an exception."""
+    """This function checks if the user is authenticated.
+    If not, it raises an exception."""
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')
 
 
 def encrypt_card_number(card_number):
-    """This function encrypts a card number using AES encryption with a provided key."""
+    """This function encrypts a card number using AES encryption
+    with a provided key."""
     # Ensure the card number and key are bytes
     card_number_bytes = card_number.encode("utf-8")
     key_bytes = AES_KEY.encode("utf-8")
@@ -32,7 +35,9 @@ def encrypt_card_number(card_number):
     iv = os.urandom(16)
 
     # Create an AES cipher with CBC mode
-    cipher = Cipher(algorithms.AES(key_bytes), modes.CFB(iv), backend=default_backend())
+    cipher = Cipher(algorithms.AES(key_bytes),
+                    modes.CFB(iv),
+                    backend=default_backend())
     encryptor = cipher.encryptor()
 
     # Encrypt the card number
@@ -53,7 +58,9 @@ def decrypt_card_number(encrypted_data):
     ciphertext = b64decode(encrypted_data["crypted_text"])
 
     # Create an AES cipher with CBC mode
-    cipher = Cipher(algorithms.AES(key_bytes), modes.CFB(iv), backend=default_backend())
+    cipher = Cipher(algorithms.AES(key_bytes),
+                    modes.CFB(iv),
+                    backend=default_backend())
     decryptor = cipher.decryptor()
 
     # Decrypt the card number
@@ -63,20 +70,20 @@ def decrypt_card_number(encrypted_data):
     return decrypted_data.decode("utf-8")
 
 
-# return "approved" for credit cards, "completed" for bank accounts"; return "rejected" for failure
+# return "approved" for credit cards, "completed" for bank accounts";
+# return "rejected" for failure
 def process_transaction(payment_type, card_number, amount):
-    """This function processes a transaction. It returns 'approved' for credit cards, 
-    'completed' for bank accounts, and 'rejected' for failure."""
+    """This function processes a transaction. It returns 'approved' for
+    credit cards, 'completed' for bank accounts, and 'rejected' for failure."""
     if validate_card(card_number) & process_card(card_number, amount):
         if payment_type == "debit_card":
             return 'completed'
-        else:
-            return 'approved'
+        return 'approved'
     return 'rejected'
 
 
 def validate_card(card_number):
-    """This function validates a card number. 
+    """This function validates a card number.
     It returns True if the card number is valid, and False otherwise."""
     url = "https://c3jkkrjnzlvl5lxof74vldwug40pxsqo.lambda-url.us-west-2.on.aws"
     headers = {"Content-Type": "application/json"}
@@ -85,7 +92,7 @@ def validate_card(card_number):
     try:
         response = requests.post(url, json=data, headers=headers)
         response.raise_for_status()  # Raise an error for bad responses (4xx or 5xx)
-        result = response.json()
+        # result = response.json()
         return True
     except requests.exceptions.RequestException as e:
         # Handle any exceptions that may occur during the request
@@ -95,7 +102,7 @@ def validate_card(card_number):
 
 
 def process_card(card_number, amt):
-    """This function processes a card transaction. 
+    """This function processes a card transaction.
     It returns True if the transaction is successful, and False otherwise."""
     url = "https://223didiouo3hh4krxhm4n4gv7y0pfzxk.lambda-url.us-west-2.on.aws"
     headers = {"Conetent-Type": "application/json"}

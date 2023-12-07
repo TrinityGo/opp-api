@@ -68,6 +68,7 @@ ALGORITHM = os.environ.get("ALGORITHM")
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 
+
 # Dependency function to get a database session
 def get_db():
     """This function gets a database session."""
@@ -77,8 +78,10 @@ def get_db():
     finally:
         db.close()
 
+
 # when an API uses this, it will enforce authorization
 DbDependency = Annotated[Session, Depends(get_db)]
+
 
 # Pydantic model for creating a new user
 class CreateUserRequest(BaseModel):
@@ -90,14 +93,16 @@ class CreateUserRequest(BaseModel):
     password: str
     role: str
 
+
 # Pydantic model for representing an access token
 class Token(BaseModel):
     """This class represents an access token."""
     access_token: str
     token_type: str
 
+
 @router.post("/", status_code=status.HTTP_201_CREATED, tags=["User Management"])
-async def create_user(db: db_dependency,
+async def create_user(db: DbDependency,
                       create_user_request: CreateUserRequest):
     '''
     Create both regular and administrative users, specified by 'role'.
