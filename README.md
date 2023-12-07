@@ -80,6 +80,127 @@ Navigate to the root of this directory
 * Restart the container: `docker start payment-service`
 * Remove the container: `docker remove payment-service`
 
+### Push New Image to ECR
+
+ On your local machine, build an image from the root of your repo and note the name of the image, make sure the name is unique
+```
+docker build --platform linux/amd64 -t <name of image> .
+```
+
+ Tag the image using the ECR URI
+```
+docker tag <image> <ECR URI>:<tag>
+```
+
+ Login in ECR
+
+ *Following command can be obtained directly from `AWS console > ECR > Repositories > Select your repo > View Push Commands`
+```
+aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <REPO_HOST>
+```
+
+ Push the tagged image to your ECR
+```
+docker push <ECR URI>:<tag>
+```
+
+ Check image existence in repo via AWS console
+* If image does not exist, double check if the image name and tag appeared in Docker Desktop matches exactly with what you have provided above
+* Check if ECR url is correct
+
+### Pull image from ECR into EC2 instance
+
+SSH into your EC2
+```
+ssh -i <PRIVATE-KEY-FILE> <EC2-INSTANCE-PUBLIC-DNS>
+```
+Run `aws configure` and add following user credentials from Access Key created for the `IAM User` with Administrative Access 
+```
+AWS Access Key ID=<YOUR-USER-ACCESS-KEY>
+AWS Secret Access Key=<YOUR-SECRET-ACCESS-KEY>
+region=<YOUR-EC2-INSTANCE-REGION>
+```
+Log into ECR
+```
+aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <REPO_HOST>
+```
+
+If Permission Denied: 
+```sudo usermod -a -G docker $USER
+grep docker /etc/group
+newgrp docker
+```
+Pull the image from ECR
+```
+docker pull <ECR URI>:<tag>
+
+eg: docker pull aws_account_id.dkr.ecr.us-east-1.amazonaws.com/opp-app:v1
+```
+Run the container
+```
+docker run --name opp-app -p 8000:8000 <ECR URI>:<tag>
+
+eg: docker run --name payment-service -p 8000:8000 aws_account_id.dkr.ecr.us-east-1.amazonaws.com/opp-app:v1
+```
+Test your endpoint
+
+```
+<ec2 public url>:<app port>/docs
+```
+
+### Cloud Infrastructure Setup
+
+
+#### Configure EC2 for Docker
+
+* Create a new EC2 instance (t2 micro-free tier eligible)
+* Create a key pair (download and save the keypair to connect to EC2)
+* Create security group and allow traffic from internet
+* Launch instance
+* * Modify the keypair to allow SSH access
+```
+chmod 400 <path to key pair>  
+```
+* Connect to instance via SSH
+```
+ssh -i <path to keypair> ec2-user@ec2-35-86-175-165.us-west-2.compute.amazonaws.com
+```
+If you can't connect on initial try, try rebooting your EC2 instance and reconnecting.
+
+
+* Install Docker
+```
+sudo yum install -y yum-utils
+sudo yum install docker
+```
+
+Start docker in background
+```
+sudo systemctl start docker.service
+sudo systemctl enable docker.service
+```
+
+Add user to docker group so you don't have to use sudo all the time with docker commands
+
+```
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+docker run hello-world
+```
+
+#### Create an ECR repo to house your docker images
+
+* Go to ECR in AWS console
+* Create a private repo with suffic `opp-app` (Note the ECR URI)
+
+#### Create Admin User on IAM
+* Go to IAM in AWS console
+* Create a User and give it Administrator Access
+* Create an access key and save the file somewhere safe
+
+#### Set up CLI tool
+* If you haven't already, install `aws-cli`, run `aws configure`, and add your credentials from the previous step to the aws cli tool
 
 ## Design Stage
 **Design Documents**
