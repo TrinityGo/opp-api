@@ -70,7 +70,8 @@ async def create_user(db: db_dependency, create_user_request: CreateUserRequest)
         
     except Exception as e:
         message = str(e)
-        return {"message": "Failed to Create User" + message}
+        # return {"message": "Failed to Create User" + message}
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Failed to Create User. Error Info: ' + message)
 
 
 @router.post("/token/", response_model=Token)

@@ -36,3 +36,15 @@ def test_create_user():
     }
     response = client.post("/auth/", json=user_data)
     assert response.status_code == 201
+
+    # unique email and username
+    user_data = {
+        "email": "newuser@example.com",
+        "username": "newuser",
+        "first_name": "New",
+        "surname": "User",
+        "password": "newpassword",
+        "role": "customer"
+    }
+    response = client.post("/auth/", json=user_data)
+    assert response.status_code == 400

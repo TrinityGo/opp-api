@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from starlette import status
 from sqlalchemy.orm import Session
-from sqlalchemy import Date, extract, func, or_
+from sqlalchemy import extract, func, or_
 from backend.db.database import SessionLocal
 from datetime import datetime
 from backend.models.models import Transactions
@@ -12,7 +12,7 @@ from backend.routers.helpers import check_user_authentication,\
 from backend.routers.admin import read_all_transactions
 from typing import Annotated
 from backend.routers.admin import check_admin_user_auth
-import json
+# import json
 
 router = APIRouter()
 
@@ -71,7 +71,8 @@ async def create_transaction(user: user_dependency, db: db_dependency, request: 
         return {"message": "Transaction created successfully"}
     except Exception as e:
         message = str(e)
-        return {"message": "Failed to create transaction " + message}
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Failed to create transaction. Error Info: ' + message)
+        # return {"message": "Failed to create transaction " + message}
 
 
 # regular user-get by user_id
@@ -110,9 +111,10 @@ async def get_transaction_by_id(user: user_dependency, db: db_dependency, transa
 async def get_transactions_by_date(user: user_dependency, db: db_dependency, date: str = Path(..., description="Date in ISO format")):
     try:
         parsed_date = datetime.strptime(date, "%Y-%m-%d")
-    except ValueError:
-        return {"error": "Invalid date format. Please provide date in YYYY-MM-DD format."}
-    message = parsed_date.date()
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invalid date format or date value. Error Info: ' + str(e))
+        # return {"error": "Invalid date format or date value. Error Info: " + str(e)}
+    
     check_user_authentication(user)
     filtered_transactions = []
     if (user.get('user_role') == 'admin'):
@@ -137,8 +139,9 @@ async def get_transactions_by_period(user: user_dependency, db: db_dependency, s
     try:
         parsed_start_date = datetime.strptime(start_date, "%Y-%m-%d")
         parsed_end_date = datetime.strptime(end_date, "%Y-%m-%d") # or user timedelta(days=1)
-    except ValueError:
-        return {"error": "Invalid date format. Please provide date in YYYY-MM-DD format."}
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invalid date format or date value. Error Info: ' + str(e))
+        # return {"error": "Invalid date format or date value. Error Info: " + str(e)}
     
     check_user_authentication(user)
     filtered_transactions = []
@@ -188,7 +191,8 @@ async def get_balance_sum_by_date(user: user_dependency, db: db_dependency, date
     try:
         parsed_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
-        return {"error": "Invalid date format. Please provide date in YYYY-MM-DD format."}
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invalid date format or date value. Error Info: ' + str(e))
+        # return {"error": "Invalid date format. Please provide date in YYYY-MM-DD format."}
     
     check_user_authentication(user)
 
@@ -216,7 +220,8 @@ async def get_balance_sum_by_period(user: user_dependency, db: db_dependency, st
         parsed_start_date = datetime.strptime(start_date, "%Y-%m-%d")
         parsed_end_date = datetime.strptime(end_date, "%Y-%m-%d") # or user timedelta(days=1)
     except ValueError:
-        return {"error": "Invalid date format. Please provide date in YYYY-MM-DD format."}
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invalid date format or date value. Error Info: ' + str(e))
+        # return {"error": "Invalid date format. Please provide date in YYYY-MM-DD format."}
     
     check_user_authentication(user)
 
@@ -283,17 +288,17 @@ async def delete_transaction(user: user_dependency, db: db_dependency, transacti
 
     filtered_transactions = db.query(Transactions).filter(Transactions.transaction_id == transaction_id)
     
-    if(user.get('user_role') == "customer"):
-        filtered_transactions = filtered_transactions.filter(Transactions.customer_id == user.get('id')).first()
-    elif(user.get('user_role') == 'merchant'):
-        filtered_transactions = filtered_transactions.filter(Transactions.merchant_id == user.get('id')).first()
-    elif(user.get('user_role') == 'admin'):
-        filtered_transactions = filtered_transactions.first()
+    # if(user.get('user_role') == "customer"):
+    #     filtered_transactions = filtered_transactions.filter(Transactions.customer_id == user.get('id')).first()
+    # elif(user.get('user_role') == 'merchant'):
+    #     filtered_transactions = filtered_transactions.filter(Transactions.merchant_id == user.get('id')).first()
+    # elif(user.get('user_role') == 'admin'):
+    #     filtered_transactions = filtered_transactions.first()
 
     # transaction_model = db.query(Transactions).filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).first()
     
     if filtered_transactions is None:
         raise HTTPException(status_code=404, detail='Transaction not found')
 
-    db.query(Transactions).filter(Transactions.transaction_id == transaction_id).filter(Transactions.customer_id == user.get('id')).delete()
+    db.query(Transactions).filter(Transactions.transaction_id == transaction_id).delete()
     db.commit()
