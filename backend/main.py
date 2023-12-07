@@ -1,3 +1,9 @@
+"""
+Main FastAPI application.
+
+This module sets up the FastAPI application, initializes the database,
+and includes routers for authentication, admin, and transactions.
+"""
 from fastapi import FastAPI
 
 from backend.models import models
