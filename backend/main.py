@@ -11,7 +11,12 @@ from backend.db.database import engine
 from backend.routers import auth, admin, transactions
 
 # application
-app = FastAPI()
+app = FastAPI(
+            title="Payment Software System",
+            description="A payment solution for software developers \
+                        and small-to-medium sized business owners, \
+                        created by Team TrinityGo.",
+        )
 
 # sets up database defined in engine
 models.Base.metadata.create_all(bind=engine)

@@ -45,7 +45,7 @@ class UpdateRequest(BaseModel):
     status: str
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, tags=["Transaction Handling"])
 async def create_transaction(user: user_dependency,
                              db: db_dependency,
                              request: TransactionRequest):
@@ -85,7 +85,7 @@ async def create_transaction(user: user_dependency,
 
 
 # regular user-get by user_id
-@router.get("/transactions/get")
+@router.get("/transactions/get", tags=["Transaction Handling"])
 async def get_all_transactions(user: user_dependency, db: db_dependency):
     '''
     Return all transactions relevant to this user,
@@ -104,7 +104,7 @@ async def get_all_transactions(user: user_dependency, db: db_dependency):
     return transactions
 
 
-@router.get("/transaction/{transaction_id}", status_code=status.HTTP_200_OK)
+@router.get("/transaction/{transaction_id}", status_code=status.HTTP_200_OK, tags=["Transaction Handling"])
 async def get_transaction_by_id(user: user_dependency,
                                 db: db_dependency,
                                 transaction_id: int = Path(gt=-1)):
@@ -131,7 +131,7 @@ async def get_transaction_by_id(user: user_dependency,
     raise HTTPException(status_code=404, detail='Transaction not found')
 
 
-@router.get("/transactions/{date}", status_code=status.HTTP_200_OK)
+@router.get("/transactions/{date}", status_code=status.HTTP_200_OK, tags=["Transaction Handling"])
 async def get_transactions_by_date(user: user_dependency,
                                    db: db_dependency,
                                    date: str = Path(
@@ -175,7 +175,8 @@ async def get_transactions_by_date(user: user_dependency,
 
 
 @router.get("/transactions/{start_date}/{end_date}",
-            status_code=status.HTTP_200_OK)
+            status_code=status.HTTP_200_OK,
+            tags=["Transaction Handling"])
 async def get_transactions_by_period(user: user_dependency,
                                      db: db_dependency,
                                      start_date: str =
@@ -238,26 +239,18 @@ async def get_transactions_by_period(user: user_dependency,
                                 {start_date} to {end_date}')
 
 
-@router.get("/balance", status_code=status.HTTP_200_OK)
+@router.get("/balance", status_code=status.HTTP_200_OK, tags=["Balance Display"])
 async def get_balance_sum(user: user_dependency, db: db_dependency):
-    # TODO: update logic:
-    # positive amount should be added if user_id == merchant,
-    # negative amount should be deducted if user_id == merchant,
-    # positive amount should be deducted if user_id == customer,
-    # negative amount should be deducted if user_id == customer
     check_user_authentication(user)
-    filtered_transactions = []
-    if (user.get('user_role') == "customer"):
-        filtered_transactions = db.query(Transactions).filter(
-                                    Transactions.customer_id == user.get('id')
-                                )
-    elif (user.get('user_role') == 'merchant'):
-        filtered_transactions = db.query(Transactions).filter(
-                                    Transactions.merchant_id == user.get('id')
-                                )
-    elif (user.get('user_role') == 'admin'):
+    if (user.get('user_role') == 'admin'):
         filtered_transactions = db.query(Transactions)
-
+    else:
+        filtered_transactions = db.query(Transactions).filter(
+            or_(
+                Transactions.customer_id == user.get('id'),
+                Transactions.merchant_id == user.get('id')
+            )
+        )
     transaction_model = (
         filtered_transactions.filter(
                             func.lower(Transactions.status) == "completed"
@@ -268,12 +261,11 @@ async def get_balance_sum(user: user_dependency, db: db_dependency):
     return balance
 
 
-@router.get("/balance/{date}", status_code=status.HTTP_200_OK)
+@router.get("/balance/{date}", status_code=status.HTTP_200_OK,tags=["Balance Display"])
 async def get_balance_sum_by_date(user: user_dependency,
                                   db: db_dependency,
                                   date: str =
                                   Path(..., description="Date in ISO format")):
-    # TODO: update logic as above
     try:
         parsed_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
@@ -285,17 +277,15 @@ async def get_balance_sum_by_date(user: user_dependency,
     check_user_authentication(user)
 
     filtered_transactions = []
-    if (user.get('user_role') == "customer"):
-        filtered_transactions = db.query(Transactions).filter(
-                                    Transactions.customer_id == user.get('id')
-                                )
-    elif (user.get('user_role') == 'merchant'):
-        filtered_transactions = db.query(Transactions).filter(
-                                    Transactions.merchant_id == user.get('id')
-                                )
-    elif (user.get('user_role') == 'admin'):
+    if (user.get('user_role') == 'admin'):
         filtered_transactions = db.query(Transactions)
-
+    else:
+        filtered_transactions = db.query(Transactions).filter(
+            or_(
+                Transactions.customer_id == user.get('id'),
+                Transactions.merchant_id == user.get('id')
+            )
+        )
     transaction_model = (
         filtered_transactions
         .filter(extract('year', Transactions.time_stamp) == parsed_date.year)
@@ -308,7 +298,7 @@ async def get_balance_sum_by_date(user: user_dependency,
     return balance
 
 
-@router.get("/balance/{start_date}/{end_date}", status_code=status.HTTP_200_OK)
+@router.get("/balance/{start_date}/{end_date}", status_code=status.HTTP_200_OK, tags=["Balance Display"])
 async def get_balance_sum_by_period(user: user_dependency,
                                     db: db_dependency,
                                     start_date: str = Path(
@@ -319,7 +309,6 @@ async def get_balance_sum_by_period(user: user_dependency,
                                         ...,
                                         description="End Date in ISO format"
                                     )):
-    # TODO: update get balance logic as above
     try:
         parsed_start_date = datetime.strptime(start_date, "%Y-%m-%d")
         # or user timedelta(days=1)
@@ -332,17 +321,15 @@ async def get_balance_sum_by_period(user: user_dependency,
 
     check_user_authentication(user)
 
-    if (user.get('user_role') == "customer"):
-        filtered_transactions = db.query(Transactions).filter(
-                                    Transactions.customer_id == user.get('id')
-                                )
-    elif (user.get('user_role') == 'merchant'):
-        filtered_transactions = db.query(Transactions).filter(
-                                    Transactions.merchant_id == user.get('id')
-                                )
-    elif (user.get('user_role') == 'admin'):
+    if (user.get('user_role') == 'admin'):
         filtered_transactions = db.query(Transactions)
-
+    else:
+        filtered_transactions = db.query(Transactions).filter(
+            or_(
+                Transactions.customer_id == user.get('id'),
+                Transactions.merchant_id == user.get('id')
+            )
+        )
     transaction_model = (
         filtered_transactions
         .filter(
@@ -377,7 +364,7 @@ async def get_balance_sum_by_period(user: user_dependency,
 
 # admin can update transaction by transaction_id
 @router.put("/transaction/{transaction_id}",
-            status_code=status.HTTP_204_NO_CONTENT)
+            status_code=status.HTTP_204_NO_CONTENT, tags=["Administrative Control"])
 async def update_transaction_by_id(user: user_dependency,
                                    db: db_dependency,
                                    request: UpdateRequest,
@@ -400,7 +387,7 @@ async def update_transaction_by_id(user: user_dependency,
 # System will auto check all approved transaction
 # update them when completed
 # No user authentication needed
-@router.put("/transactions/update", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/transactions/update", status_code=status.HTTP_204_NO_CONTENT, tags=["Transaction Status Update"])
 async def auto_update_transaction(db: db_dependency):
     # TODO May be auto-updating depending on payment processing
     transaction_model = (
@@ -424,7 +411,8 @@ async def auto_update_transaction(db: db_dependency):
 
 
 @router.delete("/transaction/{transaction_id}",
-               status_code=status.HTTP_204_NO_CONTENT)
+               status_code=status.HTTP_204_NO_CONTENT,
+               tags=["Administrative Control"])
 async def delete_transaction(user: user_dependency,
                              db: db_dependency,
                              transaction_id: int = Path(gt=-1)):

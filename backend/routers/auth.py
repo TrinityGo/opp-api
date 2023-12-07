@@ -51,7 +51,7 @@ from sqlalchemy.orm import Session
 from jose import jwt, JWTError
 from dotenv import load_dotenv
 
-router = APIRouter(prefix='/auth', tags=['auth'])
+router = APIRouter(prefix='/auth')
 
 load_dotenv()  # take environment variables from .env.
 
@@ -88,9 +88,17 @@ class Token(BaseModel):
     token_type: str
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, tags=["User Management"])
 async def create_user(db: db_dependency,
                       create_user_request: CreateUserRequest):
+    '''
+    Create both regular and administrative users, specified by 'role'.
+    
+    Regular user: role = "user",
+    
+    Admin user: role = "admin"
+    
+    '''
     try:
         create_user_model = Users(
             email=create_user_request.email,
@@ -114,7 +122,7 @@ async def create_user(db: db_dependency,
                             + message)
 
 
-@router.post("/token/", response_model=Token)
+@router.post("/token/", response_model=Token, tags=["User Management"])
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: db_dependency
@@ -152,7 +160,7 @@ def create_access_token(username: str, user_id: int,
     return token
 
 
-@router.post("/user", status_code=status.HTTP_201_CREATED)
+@router.post("/user", status_code=status.HTTP_201_CREATED, tags=["User Management"])
 async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
