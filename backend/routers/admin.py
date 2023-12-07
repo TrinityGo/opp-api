@@ -10,7 +10,7 @@ from backend.routers.auth import get_current_user
 from backend.models.models import Users, Transactions
 from backend.db.database import SessionLocal
 # Create the router
-router = APIRouter(prefix='/admin', tags=['admin'])
+router = APIRouter(prefix='/admin')
 
 
 def get_db():
