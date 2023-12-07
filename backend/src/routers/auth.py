@@ -7,7 +7,7 @@ from starlette import status
 
 from src.models.models import Users
 from passlib.context import CryptContext
-from src.db.database import SessionLocal
+from backend.src.db.database import SessionLocal
 from typing import Annotated, Any
 from sqlalchemy.orm import Session
 from jose import jwt, JWTError

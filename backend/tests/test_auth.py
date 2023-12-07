@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
-from src.main import app
-from src.routers.auth import create_user, CreateUserRequest
-from src.db.database import SessionLocal
+from backend.src.main import app
+from backend.src.routers.auth import create_user, CreateUserRequest
+from backend.src.db.database import SessionLocal
 
 client = TestClient(app)
 

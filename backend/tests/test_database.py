@@ -1,4 +1,4 @@
-from src.db import database
+from backend.src.db import database
 
 def test_database_connection():
     assert database.engine is not None
