@@ -1,5 +1,5 @@
-from models.models import Transactions
-from routers.helpers import encrypt_card_number, decrypt_card_number,process_transaction, validate_card, process_card
+from backend.models.models import Transactions
+from backend.routers.helpers import encrypt_card_number, decrypt_card_number,process_transaction, validate_card, process_card
 from datetime import datetime
 import random
 
