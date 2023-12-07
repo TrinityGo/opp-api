@@ -35,7 +35,7 @@
 SECRET_KEY =  '4d173fb647cc7cb3dbdb802a074c26011ad134533d118effbcf8694b251a0de2'
 ALGORITHM = 'HS256'
 AES_KEY = 'bDgbkMg3Hvz/VA2MzKwRQ200kvhHD9gb'
-- Github Issues Page: https://github.com/TrinityGo/opp-api/issues
+- Github Issues Page: https://github.com/orgs/TrinityGo/projects/2
 ```
 
 # Examples of How to Use the APP
