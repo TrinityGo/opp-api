@@ -1,9 +1,9 @@
 # TrinityGo Online-payment Processing Platform (OPP)
 - **Title:** Project ReadMe file
 - **Course:** NEU CS5500 Fall 2023
-- **Date:** Nov 9, 2023
+- **Date:** Dec 7, 2023
 - **Author:** Yiwen Wang, Xinyi Gao, Yijia Ma
-- **Version:** 2.0
+- **Version:** 2.1
 
 **Revision History**
 |Date|Version|Description|Author|
@@ -12,6 +12,10 @@
 |Nov 2, 2023|1.1|Update Diagrams,Hyperlinks for Reference| Yijia Ma|
 |Nov 2, 2023|1.2|Update Diagrams, Hyperlinks for Reference|Xinyi Gao, Yiwen Wang|
 |Nov 9, 2023|2.0|Create Backend Skeleton and some Public APIs|Xinyi Gao, Yiwen Wang, Yijia Ma|
+|Nov 16, 2023|2.0|Add tests and backend|Xinyi Gao, Yiwen Wang, Yijia Ma|
+|Nov 30, 2023|2.1|Add container|Xinyi Gao|
+|Dec 7, 2023|2.1|Add documentation|Xinyi Gao, Yiwen Wang, Yijia Ma|
+
 
 ## Introduction
 - *This is a course project for NEU CS5500. All the descriptions below is a mock situation for our project with course project requirments.*
@@ -48,7 +52,7 @@ Security is not just a feature; it is the foundation of our platform. We are dee
 ## Encryption Algorithm Explaination
 Our encryption algorithm relies on credited online resources and code samples. It's not independently developed.
 
-## Installation Instruction & Swagger UI
+## Instructions for use
 ### Initial Installation
 * Create a virtual environment
   * `pip install virtualenv`
@@ -64,7 +68,7 @@ Our encryption algorithm relies on credited online resources and code samples. I
   * `uvicorn backend.main:app --reload`
 * Upload `.env` file to root directory
 
-### Post-Installation
+### Post-Installation & Swagger UI
 * Open the following URL on a browser of your choice: `http://127.0.0.1:8000/docs`
 * Since all the API's are protected, you need to authenticate and authorize yourself
   * create user via `/auth` endpoint
