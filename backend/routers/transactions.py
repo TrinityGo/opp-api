@@ -91,8 +91,8 @@ async def create_transaction(user: UserDependency,
 
         # process transaction and update transaction status
         transaction_status = process_transaction(request.payment_type,
-                             request.card_number,
-                             request.amount)
+                                                 request.card_number,
+                                                 request.amount)
         create_transaction_model.status = transaction_status
         db.commit()
         return {"message": "Transaction created successfully"}
@@ -302,7 +302,7 @@ async def get_balance_sum_by_date(user: UserDependency,
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Invalid date format or date value. \
-                                    Error Info: ' + str(e)) from exc
+                                    Error Info: ' + str(exc)) from exc
 
     check_user_authentication(user)
 
@@ -355,7 +355,7 @@ async def get_balance_sum_by_period(user: UserDependency,
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Invalid date format or date value. \
-                                    Error Info: ' + str(e)) from exc
+                                    Error Info: ' + str(exc)) from exc
 
     check_user_authentication(user)
 
@@ -454,6 +454,7 @@ async def auto_update_transaction(db: DbDependency):
             transaction.status = "completed"
     db.commit()
 
+
 # admin can delete transaction by transaction_id
 @router.delete("/transaction/{transaction_id}",
                status_code=status.HTTP_204_NO_CONTENT)
@@ -486,5 +487,7 @@ async def delete_transaction(user: UserDependency,
     if filtered_transactions is None:
         raise HTTPException(status_code=404, detail='Transaction not found')
 
-    db.query(Transactions).filter(Transactions.transaction_id == transaction_id).delete()
+    db.query(Transactions).filter(
+        Transactions.transaction_id == transaction_id
+    ).delete()
     db.commit()
