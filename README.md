@@ -60,8 +60,8 @@ Our encryption algorithm relies on credited online resources and code samples. I
     * `env\Scripts\activate`
 * Install the required' dependencies
   * `pip install -r requirements.txt`
-* Open a terminal to the root of backend folder and run the following command:
-  * `uvicorn main:app --reload`
+* Open a terminal to the root of the repository and run the following command:
+  * `uvicorn backend.main:app --reload`
 * Upload `.env` file to root directory
 
 ### Post-Installation
