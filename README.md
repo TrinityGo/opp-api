@@ -52,7 +52,7 @@ Security is not just a feature; it is the foundation of our platform. We are dee
 ## Encryption Algorithm Explaination
 Our encryption algorithm relies on credited online resources and code samples. It's not independently developed.
 
-## Installation Instruction & Swagger UI
+## Instructions for use
 ### Initial Installation
 * Create a virtual environment
   * `pip install virtualenv`
@@ -68,7 +68,7 @@ Our encryption algorithm relies on credited online resources and code samples. I
   * `uvicorn backend.main:app --reload`
 * Upload `.env` file to root directory
 
-### Post-Installation
+### Post-Installation & Swagger UI
 * Open the following URL on a browser of your choice: `http://127.0.0.1:8000/docs`
 * Since all the API's are protected, you need to authenticate and authorize yourself
   * create user via `/auth` endpoint
