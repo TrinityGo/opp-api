@@ -3,14 +3,14 @@ from pydantic import BaseModel, Field
 from starlette import status
 from sqlalchemy.orm import Session
 from sqlalchemy import Date, extract, func
-from backend.db.database import SessionLocal
+from src.db.database import SessionLocal
 from datetime import datetime
-from backend.models.models import Transactions
-from backend.routers.auth import get_current_user
-from backend.routers.helpers import check_user_authentication, encrypt_card_number, process_transaction
-from backend.routers.admin import read_all_transactions
+from src.models.models import Transactions
+from src.routers.auth import get_current_user
+from src.routers.helpers import check_user_authentication, encrypt_card_number, process_transaction
+from src.routers.admin import read_all_transactions
 from typing import Annotated
-from backend.routers.admin import check_admin_user_auth
+from src.routers.admin import check_admin_user_auth
 import json
 
 router = APIRouter()

@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from backend.models import models
-from backend.db.database import engine
-from backend.routers import auth, admin, transactions
+from src.models import models
+from src.db.database import engine
+from src.routers import auth, admin, transactions
 
 # application
 app = FastAPI()
