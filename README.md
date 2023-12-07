@@ -1,9 +1,9 @@
 # TrinityGo Online-payment Processing Platform (OPP)
 - **Title:** Project ReadMe file
 - **Course:** NEU CS5500 Fall 2023
-- **Date:** Nov 9, 2023
+- **Date:** Dec 7, 2023
 - **Author:** Yiwen Wang, Xinyi Gao, Yijia Ma
-- **Version:** 2.0
+- **Version:** 2.1
 
 **Revision History**
 |Date|Version|Description|Author|
@@ -12,6 +12,10 @@
 |Nov 2, 2023|1.1|Update Diagrams,Hyperlinks for Reference| Yijia Ma|
 |Nov 2, 2023|1.2|Update Diagrams, Hyperlinks for Reference|Xinyi Gao, Yiwen Wang|
 |Nov 9, 2023|2.0|Create Backend Skeleton and some Public APIs|Xinyi Gao, Yiwen Wang, Yijia Ma|
+|Nov 16, 2023|2.0|Add tests and backend|Xinyi Gao, Yiwen Wang, Yijia Ma|
+|Nov 30, 2023|2.1|Add container|Xinyi Gao|
+|Dec 7, 2023|2.1|Add documentation|Xinyi Gao, Yiwen Wang, Yijia Ma|
+
 
 ## Introduction
 - *This is a course project for NEU CS5500. All the descriptions below is a mock situation for our project with course project requirments.*
