@@ -1,9 +1,15 @@
-from backend.db.database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Float, DateTime, JSON
+"""This file contains the models for the database"""
+# Standard imports
 from datetime import datetime
+# Third-party imports
+from sqlalchemy import Column, Integer, String
+from sqlalchemy import Boolean, ForeignKey, Float, DateTime, JSON
+# Local imports
+from backend.db.database import Base
 
 
 class Users(Base):
+    """This class represents the Users table in the database."""
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, index=True, unique=True)
@@ -16,10 +22,11 @@ class Users(Base):
     role = Column(String) # customer/merchant/admin
     phone_number = Column(String)
 
-
 class Transactions(Base):
+    """This class represents the Transactions table in the database.
+    """
     __tablename__ = 'transactions'
-    
+
     transaction_id = Column(Integer, primary_key=True, index=True, unique=True)
     customer_id = Column(Integer, ForeignKey("users.id"))
     merchant_id = Column(Integer) # foreignkey("merchants.id")
