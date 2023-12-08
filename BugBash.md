@@ -31,7 +31,8 @@
 * Tests are working in this environment as well
 
 ```
-- Github Issues Page: https://github.com/orgs/TrinityGo/projects/2
+- Github Issues Page: https://github.com/TrinityGo/opp-api/issues/new/choose
+- Or: https://github.com/TrinityGo/opp-api/tree/main/.github/ISSUE_TEMPLATE 
 ```
 
 # Examples of How to Use the APP
