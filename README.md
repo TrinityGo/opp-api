@@ -4,7 +4,7 @@
 - **Date:** Dec 7, 2023
 - **Author:** Yiwen Wang, Xinyi Gao, Yijia Ma
 - **Version:** 1.0
-- **URL**: [Link]
+- **public-facing URL**: [Link]
 
 ## Introduction
 - *This is a course project for NEU CS5500. All the descriptions below is a mock situation for our project with course project requirments.*
@@ -15,7 +15,6 @@ Welcome to the repository for our innovative Online Payment Processing Platform 
 
 Our mission is to deliver a state-of-the-art platform that rivals established services such as PayPal, Square, and Stripe, catering to a diverse clientele that includes software developers and small-to-medium-sized business owners.
 
-- Our Demo video: https://youtu.be/UUgq4tRaCn0 
 
 ### Objective
 The primary goal of this project is to architect and implement the backend infrastructure necessary to support RESTful APIs for our platform. Concurrently, we aim to create a streamlined frontend interface that offers an intuitive user experience.
