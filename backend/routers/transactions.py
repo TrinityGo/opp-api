@@ -51,7 +51,6 @@ class TransactionRequest(BaseModel):
     merchant_bank_info: str
     card_number: str
     amount: float
-    time_stamp: datetime
     payment_type: str
 
 
@@ -61,7 +60,9 @@ class UpdateRequest(BaseModel):
     status: str
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, tags=["Transaction Handling"])
+@router.post("/",
+             status_code=status.HTTP_201_CREATED,
+             tags=["Transaction Handling"])
 async def create_transaction(user: UserDependency,
                              db: DbDependency,
                              request: TransactionRequest):
@@ -79,7 +80,6 @@ async def create_transaction(user: UserDependency,
             customer_bank_info=request.customer_bank_info,
             merchant_bank_info=request.merchant_bank_info,
             encrypted_card_number=encrypted_card_number,
-            time_stamp=request.time_stamp,
             amount=request.amount,
             payment_type=request.payment_type,
             status='pending'
