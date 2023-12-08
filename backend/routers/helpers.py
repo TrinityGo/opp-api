@@ -77,12 +77,17 @@ def decrypt_card_number(encrypted_data):
 def process_transaction(payment_type, card_number, amount):
     """This function processes a transaction. It returns 'approved' for
     credit cards, 'completed' for bank accounts, and 'rejected' for failure."""
+    status = 'processing'
+    validation_res = validate_card(card_number)
+    processing_res = process_card(card_number, amount)
     if validate_card(card_number) & process_card(card_number, amount):
         if payment_type == "debit_card":
-            return 'completed'
-        return 'approved'
-    return 'rejected'
-
+            status = 'completed'
+        else:
+            status = 'approved'
+    else:
+        status = 'rejected'
+    return status
 
 def validate_card(card_number):
     """This function validates a card number.
