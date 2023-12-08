@@ -14,8 +14,6 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9]
-    secrets: inherit
-      
     
     steps:
     - uses: actions/checkout@v2
@@ -41,7 +39,7 @@ jobs:
           echo "AES_KEY is empty. Make sure the secret is correctly set."
           exit 1
         fi
-        
+
 
     - name: Test with pytest
       run: |
