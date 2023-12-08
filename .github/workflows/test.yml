@@ -4,7 +4,7 @@ name: test
 
 on:
   push:
-    branches: [ pm6 ]
+    branches: [ pm5.1 ]
 
 
 jobs:
