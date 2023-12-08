@@ -35,7 +35,7 @@
 ```
 
 # Examples of How to Use the APP
-[TODO:] how to call the API using curl or screenshots of your webpage&nbsp; 
+- Demo video: https://youtu.be/UUgq4tRaCn0 
 ## User Management  
 ### 1. Create User  
 Create both regular and administrative users, specified by 'role'.  
