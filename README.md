@@ -4,7 +4,7 @@
 - **Date:** Dec 7, 2023
 - **Author:** Yiwen Wang, Xinyi Gao, Yijia Ma
 - **Version:** 1.0
-- **public-facing URL**: [Link]
+- **Public-facing URL**: [Link]
 
 ## Introduction
 - *This is a course project for NEU CS5500. All the descriptions below is a mock situation for our project with course project requirments.*
