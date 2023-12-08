@@ -4,9 +4,7 @@ name: test
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ pm6 ]
 
 
 jobs:
@@ -38,6 +36,10 @@ jobs:
         echo "SECRET_KEY is $SECRET_KEY"
         echo "ALGORITHM is $ALGORITHM"
         echo "AES_KEY is $AES_KEY"
+        if [ -z "$AES_KEY" ]; then
+          echo "AES_KEY is empty. Make sure the secret is correctly set."
+          exit 1
+        
 
     - name: Test with pytest
       run: |
