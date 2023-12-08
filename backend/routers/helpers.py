@@ -15,8 +15,10 @@ import requests
 load_dotenv()  # take environment variables from .env.
 # These are used to create the signature for a JWT
 AES_KEY = os.environ.get("AES_KEY")
+print(AES_KEY)
 if AES_KEY is None:
     AES_KEY = os.getenv("AES_KEY")
+    print(AES_KEY)
 
 
 def check_user_authentication(user):
