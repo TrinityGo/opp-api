@@ -3,7 +3,7 @@
 - **Course:** NEU CS5500 Fall 2023
 - **Date:** Dec 7, 2023
 - **Author:** Yiwen Wang, Xinyi Gao, Yijia Ma
-- **Version:** 1.0
+- **Version:** v1.1
 - **Public-facing URL**: [Link]
 
 ## Introduction
@@ -42,6 +42,18 @@ Security is not just a feature; it is the foundation of our platform. We are dee
 
 ## Encryption Algorithm Explaination
 Our encryption algorithm relies on credited online resources and code samples. It's not independently developed.
+
+## V1.1 Updates for BugBash
+1. Closed and Explained Issue #74: A better way for user to manage unwanted transactions
+    - Our system does not permit users to delete transactions. It is important to maintain the integrity of transaction records, therefore regular users are not granted the privilege to remove transactions. This policy is in place because each processed transaction represents an actual event and should remain unaltered in the system. In the future, we might consider introducing a feature that allows users to hide or unhide transactions for enhanced user experience. However, it's important to note that this would not equate to deletion from the system.
+2. Closed and Fixed Issue #75 Enhance the timely response for card validation
+   - The problem originated due to erratic responses from the third-party API, which is tasked with validating card numbers and handling transactions.
+    - This resulted in a suboptimal user experience, as transactions were incorrectly marked as rejected.
+    - Given that our response status is dependent on the information received from the third-party API, we currently lack the means to distinguish between genuine fraudulent/invalid transactions and false negative responses.
+    - Consequently, we have decided to close this issue.
+3. Solving Issue #76 Simplify time format for user input
+    - This timestamp(the mentioned time format) is automatically generated for record-keeping purposes and should not be displayed to the user.
+
 
 ## Instructions for use
 ### Initial Installation
