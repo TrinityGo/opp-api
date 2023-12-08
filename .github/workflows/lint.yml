@@ -29,17 +29,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pylint
-    - name: Set up secret key
-      run: |
-      env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        ALGORITHM: ${{ secrets.ALGORITHM }}
-        AES_KEY: ${{ secrets.AES_KEY }}
-    - name: Use secret key
-      run: |
-        echo "SECRET_KEY is $SECRET_KEY"
-        echo "ALGORITHM is $ALGORITHM"
-        echo "AES_KEY is $AES_KEY"
     - name: Lint with pylint
       run: |
         # stop the build if there are Python syntax errors or undefinded names
