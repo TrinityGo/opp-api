@@ -15,7 +15,7 @@ Welcome to the repository for our innovative Online Payment Processing Platform 
 
 Our mission is to deliver a state-of-the-art platform that rivals established services such as PayPal, Square, and Stripe, catering to a diverse clientele that includes software developers and small-to-medium-sized business owners.
 
-[![Watch the video]] (https://youtu.be/UUgq4tRaCn0)
+![Watch the video](https://youtu.be/UUgq4tRaCn0)
 
 
 ### Objective
