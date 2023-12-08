@@ -51,10 +51,10 @@ Our encryption algorithm relies on credited online resources and code samples. I
     - This resulted in a suboptimal user experience, as transactions were incorrectly marked as rejected.
     - Given that our response status is dependent on the information received from the third-party API, we currently lack the means to distinguish between genuine fraudulent/invalid transactions and false negative responses.
     - Consequently, we have decided to close this issue.
-    - For the timely respones, we added a "procssing" status if there is a delayed response. 
+    - For the timely responses, we added a "procssing" status if there is a delay in response. 
 3. Closed and Fixed Issue #76 Simplify time format for user input
-    - This timestamp(the mentioned time format) is automatically generated for record-keeping purposes and should not be displayed to the user.
-    - For a better user experience, we do not display this timestamp to users and do not allow them to modify it. 
+    - The timestamp (as referenced in the time format) is automatically generated for each transaction based on its occurrence time and is intended solely for record-keeping. Users are not permitted to alter it. 
+    - To improve the user experience, we have now updated the system so that this timestamp field is no longer visible during the creation of a transaction.
 
 
 ## Instructions for use
