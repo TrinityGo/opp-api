@@ -39,6 +39,7 @@ jobs:
         if [ -z "$AES_KEY" ]; then
           echo "AES_KEY is empty. Make sure the secret is correctly set."
           exit 1
+        fi
         
 
     - name: Test with pytest
