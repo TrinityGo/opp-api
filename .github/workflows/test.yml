@@ -4,9 +4,9 @@ name: test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ pm5.1 ]
   pull_request:
-    branches: [ main ]
+    branches: [ pm5.1 ]
 
 
 jobs:
