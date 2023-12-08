@@ -30,10 +30,10 @@
   * authenticate and authorize user via `authorize` button at top right corner
 * Tests are working in this environment as well
 
-```
+
 - Github Issues Page: https://github.com/TrinityGo/opp-api/issues/new/choose
 - Or: https://github.com/TrinityGo/opp-api/tree/main/.github/ISSUE_TEMPLATE 
-```
+
 
 # Examples of How to Use the APP
 - Demo video: https://youtu.be/UUgq4tRaCn0 
