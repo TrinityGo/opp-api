@@ -78,8 +78,6 @@ def process_transaction(payment_type, card_number, amount):
     """This function processes a transaction. It returns 'approved' for
     credit cards, 'completed' for bank accounts, and 'rejected' for failure."""
     status = 'processing'
-    validation_res = validate_card(card_number)
-    processing_res = process_card(card_number, amount)
     if validate_card(card_number) & process_card(card_number, amount):
         if payment_type == "debit_card":
             status = 'completed'
