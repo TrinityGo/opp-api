@@ -687,7 +687,7 @@ curl -X 'PUT' \
   - A status code is returned.
 
 
-## V1.1 Updates for BugBash 0231207
+## V1.1 Updates for BugBash 20231207
 1. Closed and Explained Issue #74: A better way for user to manage unwanted transactions
     - Our system does not permit users to delete transactions. It is important to maintain the integrity of transaction records, therefore regular users are not granted the privilege to remove transactions. This policy is in place because each processed transaction represents an actual event and should remain unaltered in the system. In the future, we might consider introducing a feature that allows users to hide or unhide transactions for enhanced user experience. However, it's important to note that this would not equate to deletion from the system.
 2. Closed and Fixed Issue #75 Enhance the timely response for card validation
