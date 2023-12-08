@@ -39,4 +39,61 @@ AES_KEY = 'bDgbkMg3Hvz/VA2MzKwRQ200kvhHD9gb'
 ```
 
 # Examples of How to Use the APP
-[TODO:] how to call the API using curl or screenshots of your webpage
+[TODO:] how to call the API using curl or screenshots of your webpage&nbsp; 
+## User Management  
+### 1. Create user  
+Create both regular and administrative users, specified by 'role'.  
+  -  Regular user: role = "user"  
+  -   Admin user: role = "admin"  
+
+- HTTP requests using curl
+```
+curl -X 'POST' \
+  'http://ec2-54-173-190-240.compute-1.amazonaws.com:8000/auth/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "email": "Yijia@gmail.com",
+  "username": "y",
+  "first_name": "Yijia",
+  "surname": "Ma",
+  "password": "123",
+  "role": "admin"
+}'
+```
+- Triggered Action
+```
+{
+    "email": "Yijia@gmail.com",
+    "id": 2,
+    "first_name": "Yijia",
+    "hashed_password": "$2b$12$FEDXBwxzZdPZbjbb/XPkLeOSKu00a1H7XQe8cDMW2m1JRzAL51HPC",
+    "role": "admin",
+    "username": "y",
+    "surname": "Ma",
+    "is_active": true,
+    "phone_number": null
+  }
+```
+- Response body
+```
+{
+  "message": "User created successfully"
+}
+```
+
+
+admin
+The following APIs have authorization checks in place, and only users with `admin` are allowed to access them.
+1. Read all transactions
+
+2. Read all Users
+This function returns all users in the database. It is only accessible to admin users.
+```
+curl -X 'GET' \
+  'http://ec2-54-173-190-240.compute-1.amazonaws.com:8000/admin/users' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ5IiwiaWQiOjUsInJvbGUiOiJhZG1pbiIsImV4cCI6MTcwMTk5OTQwMX0._cZ5LKdkNnxm9uzs0BzbA_m8_9LkHyhxcOgT2VygS98'
+```
+Response:
+
