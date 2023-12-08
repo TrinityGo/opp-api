@@ -46,3 +46,11 @@ def test_encrypt_card_number():
     encrypted_data = encrypt_card_number(card_number)
     decrypted_card_number = decrypt_card_number(encrypted_data)
     assert card_number == decrypted_card_number
+
+
+async def test_number():
+    res = await validate_card(GOOD_CARD_NUMBER)
+    assert res is True
+
+    res = await process_card(GOOD_CARD_NUMBER, 50)
+    assert res is False

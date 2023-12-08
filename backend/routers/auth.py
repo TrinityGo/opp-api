@@ -106,11 +106,11 @@ async def create_user(db: DbDependency,
                       create_user_request: CreateUserRequest):
     '''
     Create both regular and administrative users, specified by 'role'.
-    
+
     Regular user: role = "user",
-    
+
     Admin user: role = "admin"
-    
+
     '''
     try:
         create_user_model = Users(
