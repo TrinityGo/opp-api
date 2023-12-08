@@ -123,7 +123,9 @@ async def get_all_transactions(user: UserDependency, db: DbDependency):
     return transactions
 
 
-@router.get("/transaction/{transaction_id}", status_code=status.HTTP_200_OK, tags=["Transaction Handling"])
+@router.get("/transaction/{transaction_id}",
+            status_code=status.HTTP_200_OK,
+            tags=["Transaction Handling"])
 async def get_transaction_by_id(user: UserDependency,
                                 db: DbDependency,
                                 transaction_id: int = Path(gt=-1)):
@@ -269,7 +271,7 @@ async def get_balance_sum(user: UserDependency, db: DbDependency):
     raises an exception. If the date range is invalid, it raises an
     exception."""
     check_user_authentication(user)
-    if (user.get('user_role') == 'admin'):
+    if user.get('user_role') == 'admin':
         filtered_transactions = db.query(Transactions)
     else:
         filtered_transactions = db.query(Transactions).filter(
@@ -305,7 +307,7 @@ async def get_balance_sum_by_date(user: UserDependency,
     check_user_authentication(user)
 
     filtered_transactions = []
-    if (user.get('user_role') == 'admin'):
+    if user.get('user_role') == 'admin':
         filtered_transactions = db.query(Transactions)
     else:
         filtered_transactions = db.query(Transactions).filter(
@@ -326,7 +328,9 @@ async def get_balance_sum_by_date(user: UserDependency,
     return balance
 
 
-@router.get("/balance/{start_date}/{end_date}", status_code=status.HTTP_200_OK, tags=["Balance Display"])
+@router.get("/balance/{start_date}/{end_date}",
+            status_code=status.HTTP_200_OK,
+            tags=["Balance Display"])
 async def get_balance_sum_by_period(user: UserDependency,
                                     db: DbDependency,
                                     start_date: str = Path(
@@ -355,7 +359,7 @@ async def get_balance_sum_by_period(user: UserDependency,
 
     check_user_authentication(user)
 
-    if (user.get('user_role') == 'admin'):
+    if user.get('user_role') == 'admin':
         filtered_transactions = db.query(Transactions)
     else:
         filtered_transactions = db.query(Transactions).filter(
@@ -422,7 +426,9 @@ async def update_transaction_by_id(user: UserDependency,
 # System will auto check all approved transaction
 # update them when completed
 # No user authentication needed
-@router.put("/transactions/update", status_code=status.HTTP_204_NO_CONTENT, tags=["Transaction Status Update"])
+@router.put("/transactions/update",
+            status_code=status.HTTP_204_NO_CONTENT,
+            tags=["Transaction Status Update"])
 async def auto_update_transaction(db: DbDependency):
     """This function auto updates all approved transactions to completed
     status if the transaction is older than 2 days. It returns a 204 status
