@@ -6,8 +6,8 @@
 
 # Introduction
 - This is a bugbash file to our project. 
-- Our App's URL：
-## Instructions for use
+- Our App's URL： http://ec2-54-173-190-240.compute-1.amazonaws.com:8000/docs#/ 
+## Instructions for local use
 ### Initial Installation
 * Create a virtual environment
   * `pip install virtualenv`
